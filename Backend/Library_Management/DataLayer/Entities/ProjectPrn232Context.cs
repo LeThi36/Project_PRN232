@@ -6,10 +6,6 @@ namespace DataLayer.Entities;
 
 public partial class ProjectPrn232Context : DbContext
 {
-    public ProjectPrn232Context()
-    {
-    }
-
     public ProjectPrn232Context(DbContextOptions<ProjectPrn232Context> options) : base(options) { }
 
     public virtual DbSet<Author> Authors { get; set; }
@@ -23,8 +19,6 @@ public partial class ProjectPrn232Context : DbContext
     public virtual DbSet<BookReservation> BookReservations { get; set; }
 
     public virtual DbSet<BookReview> BookReviews { get; set; }
-
-    public virtual DbSet<Bookshelf> Bookshelves { get; set; }
 
     public virtual DbSet<BorrowRecord> BorrowRecords { get; set; }
 
@@ -107,9 +101,6 @@ public partial class ProjectPrn232Context : DbContext
             entity.Property(e => e.BookId)
                 .HasMaxLength(450)
                 .HasColumnName("book_id");
-            entity.Property(e => e.BookshelfId)
-                .HasMaxLength(450)
-                .HasColumnName("bookshelf_id");
             entity.Property(e => e.CopyCode)
                 .HasMaxLength(20)
                 .HasColumnName("copy_code");
@@ -122,9 +113,6 @@ public partial class ProjectPrn232Context : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_book_copies_books");
 
-            entity.HasOne(d => d.Bookshelf).WithMany(p => p.BookCopies)
-                .HasForeignKey(d => d.BookshelfId)
-                .HasConstraintName("FK_book_copies_bookshelves");
         });
 
         modelBuilder.Entity<BookFavorite>(entity =>
@@ -212,23 +200,6 @@ public partial class ProjectPrn232Context : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_book_reviews_users");
-        });
-
-        modelBuilder.Entity<Bookshelf>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__bookshel__3213E83F254924B2");
-
-            entity.ToTable("bookshelves");
-
-            entity.HasIndex(e => new { e.Rack, e.ShelfNumber }, "UQ_bookshelves_rack_shelf").IsUnique();
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Capacity).HasColumnName("capacity");
-            entity.Property(e => e.CurrentCount).HasColumnName("current_count");
-            entity.Property(e => e.Rack)
-                .HasMaxLength(10)
-                .HasColumnName("rack");
-            entity.Property(e => e.ShelfNumber).HasColumnName("shelf_number");
         });
 
         modelBuilder.Entity<BorrowRecord>(entity =>

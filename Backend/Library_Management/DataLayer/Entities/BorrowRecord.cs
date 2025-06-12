@@ -9,11 +9,12 @@ public partial class BorrowRecord : BaseEntity
 
     public string CopyId { get; set; } = null!;
 
-    public DateOnly BorrowDate { get; set; }
+    public DateTime BorrowDate { get; set; } // Gia hạn thêm ngày mượn thì cập nhật lại BorrowDate và DueDate
 
-    public DateOnly DueDate { get; set; }
+    public DateTime DueDate { get; set; }
 
-    public DateOnly? ReturnDate { get; set; }
+    public DateTime? ReturnDate { get; set; }
+    public int ExtensionDateCount { get; set; } = 0;
 
     public string Status { get; set; } = null!;
 

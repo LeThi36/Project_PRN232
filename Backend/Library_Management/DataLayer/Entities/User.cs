@@ -6,6 +6,7 @@ namespace DataLayer.Entities;
 public partial class User : BaseEntity
 {
     public string Username { get; set; } = null!;
+    public string StudentCode { get; set; }
 
     public string PasswordHash { get; set; } = null!;
 
@@ -13,7 +14,7 @@ public partial class User : BaseEntity
 
     public string? PhoneNumber { get; set; }
 
-    public DateTime? DateOfBirth { get; set; }
+    public DateOnly? DateOfBirth { get; set; }
 
     public int? Gender { get; set; }
 
