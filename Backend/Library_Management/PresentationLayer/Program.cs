@@ -4,6 +4,7 @@ using DataLayer.Repositories;
 using Microsoft.EntityFrameworkCore;
 using BussinessLayer.Services.Interface;
 using BussinessLayer.Services;
+using BussinessLayer.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,8 +19,14 @@ builder.Services.AddDbContext<ProjectPrn232Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped(typeof(IPaginationRepository<>), typeof(PaginationRepository<>));
 
 builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<IBookService, BookService>();
+
+// Register AutoMapper
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
 
 var app = builder.Build();
 
