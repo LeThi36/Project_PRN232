@@ -1,5 +1,9 @@
 using DataLayer.Entities;
+using DataLayer.Repositories.Abstraction;
+using DataLayer.Repositories;
 using Microsoft.EntityFrameworkCore;
+using BussinessLayer.Services.Interface;
+using BussinessLayer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +16,10 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ProjectPrn232Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+builder.Services.AddScoped<IAuthorService, AuthorService>();
 
 var app = builder.Build();
 
