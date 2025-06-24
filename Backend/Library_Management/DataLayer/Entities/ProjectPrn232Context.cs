@@ -324,6 +324,12 @@ public partial class ProjectPrn232Context : DbContext
                 .HasConstraintName("FK_users_roles");
         });
 
+        modelBuilder.Entity<RevokedToken>(entity =>
+        {
+            entity.ToTable("RevokedTokens"); // Đặt tên bảng trong DB
+            entity.HasIndex(e => e.Token).IsUnique(); // Đảm bảo token là duy nhất
+        });
+
         OnModelCreatingPartial(modelBuilder);
     }
 

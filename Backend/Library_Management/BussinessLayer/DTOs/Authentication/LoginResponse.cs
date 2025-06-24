@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLayer.Enum
+namespace BussinessLayer.DTOs.Authentication
 {
-    public enum RoleEnum
+    public class LoginResponse
     {
-        Admin = 0, 
-        Librarian = 1, 
-        Student = 2
+        public string AccessToken { get; set; }
     }
 }

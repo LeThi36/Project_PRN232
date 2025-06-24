@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Enum
 {
-    public enum RoleEnum
+    public enum Gender
     {
-        Admin = 0, 
-        Librarian = 1, 
-        Student = 2
+        Male,
+        Female
     }
 }
