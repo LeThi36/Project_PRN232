@@ -4,6 +4,7 @@ using DataLayer.Repositories;
 using Microsoft.EntityFrameworkCore;
 using BussinessLayer.Services.Interface;
 using BussinessLayer.Services;
+using BussinessLayer.Mappings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -22,11 +23,16 @@ builder.Services.AddDbContext<ProjectPrn232Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped(typeof(IPaginationRepository<>), typeof(PaginationRepository<>));
 
 builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IRevokedTokenService, RevokedTokenService>();
 builder.Services.AddScoped<IUserService, UserService>();
+
+// Register AutoMapper
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 // Cấu hình xác thực JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
