@@ -554,6 +554,12 @@ public partial class ProjectPrn232Context : DbContext
         //    new BorrowRecord { Id = "9", UserId = user3Id, CopyId = copyIds[8], BorrowDate = fixedDateTime.AddDays(-4), DueDate = fixedDateTime.AddDays(3), ReturnDate = null, Fine = 0.00m, Status = "Borrowed", ExtensionDateCount = 0, CreatedAt = fixedDateTime, UpdatedAt = fixedDateTime },
         //    new BorrowRecord { Id = "10", UserId = user4Id, CopyId = copyIds[9], BorrowDate = fixedDateTime.AddDays(-6), DueDate = fixedDateTime.AddDays(1), ReturnDate = null, Fine = 0.00m, Status = "Borrowed", ExtensionDateCount = 0, CreatedAt = fixedDateTime, UpdatedAt = fixedDateTime }
         //);
+        
+        modelBuilder.Entity<RevokedToken>(entity =>
+        {
+            entity.ToTable("RevokedTokens"); // Đặt tên bảng trong DB
+            entity.HasIndex(e => e.Token).IsUnique(); // Đảm bảo token là duy nhất
+        });
 
         OnModelCreatingPartial(modelBuilder);
     }
