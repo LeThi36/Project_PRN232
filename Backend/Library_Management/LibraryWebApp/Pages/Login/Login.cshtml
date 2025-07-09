@@ -1,0 +1,117 @@
+﻿@page
+@model LibraryWebApp.Pages.Login.LoginModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng nhập</title>
+
+    <link rel="shortcut icon" href="~/favicon.ico">
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/all.min.css">
+    <link rel="stylesheet" href="~/css/animate.css">
+    <link rel="stylesheet" href="~/css/magnific-popup.css">
+    <link rel="stylesheet" href="~/css/meanmenu.css">
+    <link rel="stylesheet" href="~/css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="~/css/nice-select.css">
+    <link rel="stylesheet" href="~/css/icomoon.css">
+    <link rel="stylesheet" href="~/css/main.css">
+    <link rel="stylesheet" href="~/css/login-modal.css" asp-append-version="true" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+<body>
+
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="close-btn">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="window.location.href='/'">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="form-wrapper">
+                    <h1 id="loginModalLabel" class="text-center mb-4">welcome!</h1>
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+
+                        <input class="inputField" asp-for="LoginRequest.StudentCode" autocomplete="username" aria-required="true" placeholder="Student Code">
+                        <span asp-validation-for="LoginRequest.StudentCode" class="text-danger d-block mb-2"></span>
+
+                        <input class="inputField" asp-for="LoginRequest.Password" type="password" autocomplete="current-password" aria-required="true" placeholder="Enter Password">
+                        <span asp-validation-for="LoginRequest.Password" class="text-danger d-block mb-2"></span>
+
+                        <div class="input-check remember-me">
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="form-check-input" name="save-for-next" id="saveForNext">
+                                <label for="saveForNext">Remember me</label>
+                            </div>
+                            <div class="text"> <a href="#">Forgot Your password?</a> </div>
+                        </div>
+                        <div class="loginBtn d-flex justify-content-center">
+                            <button type="submit" class="theme-btn rounded-0 w-100"> Log in </button>
+                        </div>
+                        <div class="d-flex justify-content-center mt-3">
+                            <button type="button"
+                                    class="theme-btn rounded-3 px-4 py-2"
+                                    style="background: #28a745; color: #fff; border: none; min-width: 120px;"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#registrationModal">
+                                Create Account
+                            </button>
+                        </div>
+                    </form>
+                    <div class="orting-badge">
+                        Or
+                    </div>
+                    <div>
+                        <a class="another-option" href="https://www.google.com/">
+                            <img src="~/img/google.png" alt="google">
+                            Continue With Google
+                        </a>
+                    </div>
+                    <div>
+                        <a class="another-option another-option-two" href="https://www.facebook.com/">
+                            <img src="~/img/facebook.png" alt="google">
+                            Continue With Facebook
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="~/js/jquery-3.7.1.min.js"></script>
+    <script src="~/js/viewport.jquery.js"></script>
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/jquery.nice-select.min.js"></script>
+    <script src="~/js/jquery.waypoints.js"></script>
+    <script src="~/js/jquery.counterup.min.js"></script>
+    <script src="~/js/swiper-bundle.min.js"></script>
+    <script src="~/js/jquery.meanmenu.min.js"></script>
+    <script src="~/js/jquery.magnific-popup.min.js"></script>
+    <script src="~/js/wow.min.js"></script>
+    <script src="~/js/gsap.min.js"></script>
+    <script src="~/js/main.js"></script>
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Kích hoạt modal khi trang được tải
+        $(document).ready(function() {
+            var loginModal = new bootstrap.Modal(document.getElementById('loginModal'), {
+                backdrop: 'static',
+                keyboard: false
+            });
+            loginModal.show();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+﻿@page
+@model LibraryWebApp.Pages.Login.LogoutModel
+@{
+    ViewData["Title"] = "Logout";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Đăng xuất</h1>
+    <p>Bạn có chắc muốn đăng xuất?</p>
+    <form method="post" asp-area="" asp-page="/Login/Logout">
+        <button type="submit" class="nav-link text-dark btn btn-link" style="background:none;border:none;">
+            <i class="fa fa-sign-out-alt"></i> Logout
+        </button>
+    </form>
+</div>
