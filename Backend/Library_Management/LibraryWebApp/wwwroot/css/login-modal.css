@@ -1,0 +1,167 @@
+﻿/* login-modal.css */
+
+/* Adjust the modal-dialog and modal-content for centering and background */
+#loginModal .modal-dialog {
+    max-width: fit-content; /* Adjust width to content */
+    margin: auto; /* Center the modal horizontally */
+    display: flex;
+    align-items: center; /* Center the modal vertically */
+    min-height: 100vh; /* Ensure modal takes full viewport height for vertical centering */
+}
+
+#loginModal .modal-content {
+    background-color: #fff; /* White background for the content area */
+    border-radius: 8px; /* Slightly rounded corners for the white box */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    padding: 150px; /* Padding around the form */
+    /* Remove width: 100% here as form-wrapper will control width */
+}
+
+/* Ensure the form-wrapper takes up the available space and is styled correctly */
+.form-wrapper {
+    width: 400px; /* Make form-wrapper fill its parent (modal-content) */
+    /*max-width: 1600px;*/ /* Limit the maximum width of the form for better aesthetics */
+    margin: 0 auto; /* Center the form-wrapper itself within modal-content if max-width is applied */
+    /* Remove any previous padding here if it's already on modal-content */
+}
+
+/* General improvements for input fields and buttons for better appearance */
+.inputField {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.theme-btn {
+    padding: 12px 25px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+    .theme-btn.rounded-0 {
+        border-radius: 5px !important; /* Override if needed for specific styles */
+    }
+
+.loginBtn button {
+    background-color: #007bff; /* Example: blue for login */
+    color: white;
+    border: none;
+}
+
+    .loginBtn button:hover {
+        background-color: #0056b3;
+    }
+
+.d-flex.justify-content-center.mt-3 button {
+    /* Style for the "Create Account" button */
+    background-color: #28a745; /* Green for create account */
+    color: #fff;
+    border: none;
+    min-width: 120px;
+    border-radius: 5px; /* Apply border-radius here as well */
+}
+
+    .d-flex.justify-content-center.mt-3 button:hover {
+        background-color: #218838;
+    }
+
+
+/* Styling for "Or" badge */
+.orting-badge {
+    text-align: center;
+    margin: 20px 0;
+    position: relative;
+    color: #888;
+}
+
+    .orting-badge::before,
+    .orting-badge::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        width: 40%; /* Adjust line length */
+        height: 1px;
+        background-color: #eee;
+    }
+
+    .orting-badge::before {
+        left: 0;
+    }
+
+    .orting-badge::after {
+        right: 0;
+    }
+
+/* Styling for social login options */
+.another-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 10px;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.3s ease;
+}
+
+    .another-option:hover {
+        background-color: #f8f8f8;
+    }
+
+    .another-option img {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+    }
+
+/* Close button styling */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+    .close-btn .btn-close {
+        font-size: 1.5rem;
+        background: none;
+        border: none;
+        opacity: 0.7;
+        transition: opacity 0.3s ease;
+    }
+
+        .close-btn .btn-close:hover {
+            opacity: 1;
+        }
+
+/* Remember me and Forgot password alignment */
+.remember-me {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+    .remember-me .checkbox-wrapper {
+        display: flex;
+        align-items: center;
+    }
+
+        .remember-me .checkbox-wrapper input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+    .remember-me .text a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+        .remember-me .text a:hover {
+            text-decoration: underline;
+        }
