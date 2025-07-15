@@ -1,0 +1,59 @@
+﻿@page
+@model LibraryWebApp.Pages.Book.EditModel
+@{
+    ViewData["Title"] = "Edit Book";
+}
+
+<h2>Edit Book</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Book.Title" />
+        <input asp-for="Book.Title" class="form-control" />
+        <span asp-validation-for="Book.Title" class="text-danger" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Book.AuthorId" />
+        <select asp-for="Book.AuthorId" class="form-control" asp-items="Model.Authors">
+            <option value="">-- Select Author --</option>
+        </select>
+    </div>
+
+    @* <div class="form-group"> *@
+    @*     <label asp-for="Book.CategoryId" /> *@
+    @*     <select asp-for="Book.CategoryId" class="form-control" asp-items="Model.Categories"> *@
+    @*         <option value="">-- Select Category --</option> *@
+    @*     </select> *@
+    @* </div> *@
+
+    @* <div class="form-group"> *@
+    @*     <label asp-for="Book.PublisherId" /> *@
+    @*     <select asp-for="Book.PublisherId" class="form-control" asp-items="Model.Publishers"> *@
+    @*         <option value="">-- Select Publisher --</option> *@
+    @*     </select> *@
+    @* </div> *@
+
+    <div class="form-group">
+        <label asp-for="Book.PublicationYear" />
+        <input asp-for="Book.PublicationYear" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Book.Description" />
+        <textarea asp-for="Book.Description" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Book.ImageUrl" />
+        <input asp-for="Book.ImageUrl" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Book.Status" />
+        <input asp-for="Book.Status" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Edit</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+</form>
