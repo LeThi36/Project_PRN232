@@ -36,6 +36,30 @@ namespace BussinessLayer.Services
 
             return _mapper.Map<IEnumerable<UserDto>>(students);
         }
+        public async Task<UserDto?> CreateUserAsync(CreateUserDto dto)
+        {
+            var user = _mapper.Map<User>(dto);
+            user.Id = Guid.NewGuid().ToString();
+            user.CreatedAt = DateTime.UtcNow;
 
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<UserDto>(user);
+        }
+
+        public async Task<bool> UpdateUserAsync(UpdateUserDto dto)
+        {
+            var user = await _context.Users.FindAsync(dto.Id);
+            if (user == null || user.DeletedAt != null) return false;
+
+            _mapper.Map(dto, user);
+            user.UpdatedAt = DateTime.UtcNow;
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }
