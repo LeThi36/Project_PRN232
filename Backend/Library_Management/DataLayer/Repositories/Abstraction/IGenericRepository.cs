@@ -11,6 +11,7 @@ namespace DataLayer.Repositories.Abstraction
     {
         Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, Func<IQueryable<T>, IQueryable<T>>? includes = null);
         Task<T> GetAsync(Expression<Func<T, bool>> filter, Func<IQueryable<T>, IQueryable<T>>? includes = null);
+        Task<T> GetByIdAsync(int id);
         Task CreateAsync(T entity);
         Task RemoveAsync(T entity);
         Task UpdateAsync(T entity);
