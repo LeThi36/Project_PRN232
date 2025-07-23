@@ -32,9 +32,10 @@ builder.Services.AddScoped<IRevokedTokenService, RevokedTokenService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBorrowService, BorrowService>();
 builder.Services.AddScoped<IBookFavoriteService, BookFavoriteService>();
+builder.Services.AddScoped<IPublisherService, PublisherService>();
+builder.Services.AddScoped<IBookCopyService, BookCopyService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
-
 
 
 // Register AutoMapper
