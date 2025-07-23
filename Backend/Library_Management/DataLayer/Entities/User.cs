@@ -31,7 +31,7 @@ public partial class User : BaseEntity
     [DisplayName("Date of birth")]
     public DateOnly? DateOfBirth { get; set; }
 
-    public Gender Gender { get; set; }
+    public Gender? Gender { get; set; }
 
     public string? Address { get; set; }
 

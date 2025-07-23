@@ -27,24 +27,6 @@ namespace DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "bookshelves",
-                columns: table => new
-                {
-                    id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    rack = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    shelf_number = table.Column<int>(type: "int", nullable: false),
-                    capacity = table.Column<int>(type: "int", nullable: false),
-                    current_count = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__bookshel__3213E83F254924B2", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "categories",
                 columns: table => new
                 {
@@ -94,11 +76,27 @@ namespace DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RevokedTokens",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RevokedTokens", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "roles",
                 columns: table => new
                 {
                     id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    role_name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    role_name = table.Column<int>(type: "int", maxLength: 50, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -151,10 +149,11 @@ namespace DataLayer.Migrations
                 {
                     id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    StudentCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     password_hash = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    phone_number = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
-                    date_of_birth = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    phone_number = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    date_of_birth = table.Column<DateOnly>(type: "date", nullable: true),
                     gender = table.Column<int>(type: "int", nullable: true),
                     address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     role_id = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: true),
@@ -181,7 +180,6 @@ namespace DataLayer.Migrations
                     book_id = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
                     copy_code = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    bookshelf_id = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -193,11 +191,6 @@ namespace DataLayer.Migrations
                         name: "FK_book_copies_books",
                         column: x => x.book_id,
                         principalTable: "books",
-                        principalColumn: "id");
-                    table.ForeignKey(
-                        name: "FK_book_copies_bookshelves",
-                        column: x => x.bookshelf_id,
-                        principalTable: "bookshelves",
                         principalColumn: "id");
                 });
 
@@ -292,9 +285,10 @@ namespace DataLayer.Migrations
                     id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     user_id = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
                     copy_id = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
-                    borrow_date = table.Column<DateOnly>(type: "date", nullable: false),
-                    due_date = table.Column<DateOnly>(type: "date", nullable: false),
-                    return_date = table.Column<DateOnly>(type: "date", nullable: true),
+                    borrow_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    due_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    return_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ExtensionDateCount = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     fine = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -320,11 +314,6 @@ namespace DataLayer.Migrations
                 name: "IX_book_copies_book_id",
                 table: "book_copies",
                 column: "book_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_book_copies_bookshelf_id",
-                table: "book_copies",
-                column: "bookshelf_id");
 
             migrationBuilder.CreateIndex(
                 name: "UQ__book_cop__5196394F6914230C",
@@ -378,12 +367,6 @@ namespace DataLayer.Migrations
                 column: "publisher_id");
 
             migrationBuilder.CreateIndex(
-                name: "UQ_bookshelves_rack_shelf",
-                table: "bookshelves",
-                columns: new[] { "rack", "shelf_number" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_borrow_records_copy_id",
                 table: "borrow_records",
                 column: "copy_id");
@@ -392,6 +375,12 @@ namespace DataLayer.Migrations
                 name: "IX_borrow_records_user_id",
                 table: "borrow_records",
                 column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RevokedTokens_Token",
+                table: "RevokedTokens",
+                column: "Token",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_users_role_id",
@@ -418,6 +407,9 @@ namespace DataLayer.Migrations
                 name: "events");
 
             migrationBuilder.DropTable(
+                name: "RevokedTokens");
+
+            migrationBuilder.DropTable(
                 name: "book_copies");
 
             migrationBuilder.DropTable(
@@ -425,9 +417,6 @@ namespace DataLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "books");
-
-            migrationBuilder.DropTable(
-                name: "bookshelves");
 
             migrationBuilder.DropTable(
                 name: "roles");
