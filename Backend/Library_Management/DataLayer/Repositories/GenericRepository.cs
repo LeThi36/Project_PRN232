@@ -63,6 +63,10 @@ namespace DataLayer.Repositories
                 throw new Exception($"Error fetching data: {ex.Message}", ex);
             }
         }
+        public async Task<T> GetByIdAsync(int id)
+        {
+            return await _dbSet.FindAsync(id);
+        }
 
         public async Task CreateAsync(T entity)
         {
