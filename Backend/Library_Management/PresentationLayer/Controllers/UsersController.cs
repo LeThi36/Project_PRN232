@@ -23,5 +23,33 @@ namespace PresentationLayer.Controllers
             var students = await _userService.GetStudentsAsync();
             return Ok(students);
         }
+        [HttpPost]
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto dto)
+        {
+            var result = await _userService.CreateUserAsync(dto);
+            return result == null ? Conflict("Student already exists.") : CreatedAtAction(nameof(GetStudents), new { }, result);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] UpdateUserDto dto)
+        {
+            if (id != dto.Id) return BadRequest();
+
+            var result = await _userService.UpdateUserAsync(dto);
+            return result ? NoContent() : NotFound();
+        }
+        [HttpPut("{id}/ban")]
+        public async Task<IActionResult> BanUser(string id)
+        {
+            var result = await _userService.ToggleBanStatusAsync(id, true);
+            return result ? NoContent() : NotFound();
+        }
+
+        [HttpPut("{id}/unban")]
+        public async Task<IActionResult> UnbanUser(string id)
+        {
+            var result = await _userService.ToggleBanStatusAsync(id, false);
+            return result ? NoContent() : NotFound();
+        }
     }
 }
