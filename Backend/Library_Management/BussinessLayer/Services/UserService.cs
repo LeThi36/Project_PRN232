@@ -61,5 +61,28 @@ namespace BussinessLayer.Services
 
             return true;
         }
+        public async Task<bool> ToggleBanStatusAsync(string userId, bool ban)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null) return false;
+
+
+            //check if deleted or not
+            if (ban)
+            {
+                if (user.DeletedAt != null) return false;
+                user.DeletedAt = DateTime.UtcNow;
+            }
+            else
+            {
+                if (user.DeletedAt == null) return false;
+                user.DeletedAt = null;
+            }
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }
