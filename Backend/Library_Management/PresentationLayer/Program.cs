@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
+using BussinessLayer.Helper.FileService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +38,9 @@ builder.Services.AddScoped<IBookCopyService, BookCopyService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICartService, CartService>();
+
+builder.Services.AddScoped<IFileService, FileService>();
+
 
 // Đăng ký AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
