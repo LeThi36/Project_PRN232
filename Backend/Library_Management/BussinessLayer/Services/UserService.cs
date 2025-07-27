@@ -49,7 +49,7 @@ namespace BussinessLayer.Services
         {
             var user = _mapper.Map<User>(dto);
             user.Id = Guid.NewGuid().ToString();
-            user.CreatedAt = DateTime.UtcNow;
+            user.CreatedAt = DateTime.Now;
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -63,11 +63,11 @@ namespace BussinessLayer.Services
             if (user == null || user.DeletedAt != null) return false;
 
             _mapper.Map(dto, user);
-            user.UpdatedAt = DateTime.UtcNow;
+            user.UpdatedAt = DateTime.Now;
 
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
-            return user;
+            return true;
         }
 
         public async Task<UserDto?> UpdateProfileAsync(string userId, UpdateProfileDto updateDto)
@@ -104,8 +104,8 @@ namespace BussinessLayer.Services
             await _userRepository.UpdateAsync(user);
 
             return _mapper.Map<UserDto>(user);
-            return true;
         }
+
         public async Task<bool> ToggleBanStatusAsync(string userId, bool ban)
         {
             var user = await _context.Users.FindAsync(userId);
