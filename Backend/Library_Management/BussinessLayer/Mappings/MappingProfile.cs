@@ -43,7 +43,7 @@ namespace BussinessLayer.Mappings
     .ForMember(dest => dest.CopyCode, opt => opt.MapFrom(src => src.Copy.CopyCode));
 
             // Map Category
-            CreateMap<Category, CategoryDto>().ReverseMap();
+            CreateMap<Category, CategoryDto>();
             CreateMap<CreateCategoryDto, Category>();
             CreateMap<UpdateCategoryDto, Category>();
 
