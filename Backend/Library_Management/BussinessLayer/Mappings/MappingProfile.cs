@@ -2,6 +2,7 @@
 using BussinessLayer.DTOs.Book;
 using BussinessLayer.DTOs.BookFavorite;
 using BussinessLayer.DTOs.BorrowRecord;
+using BussinessLayer.DTOs.Cart;
 using BussinessLayer.DTOs.Category;
 using BussinessLayer.DTOs.User;
 using DataLayer.Entities;
@@ -28,11 +29,15 @@ namespace BussinessLayer.Mappings
               .ForMember(dest => dest.AddedAt, opt => opt.MapFrom(_ => DateTime.UtcNow));
 
             CreateMap<BookFavorite, BookFavoriteDto>()
-                .ForMember(dest => dest.BookTitle, opt => opt.MapFrom(src => src.Book.Title));
+   .ForMember(dest => dest.BookTitle, opt => opt.MapFrom(src => src.Book.Title))
+   .ForMember(dest => dest.AuthorName, opt => opt.MapFrom(src => src.Book.Author!.AuthorName))
+   .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.Book.ImageUrl));
 
             //Map User
             CreateMap<User, UserDto>()
             .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.ToString()));
+            CreateMap<CreateUserDto, User>();
+            CreateMap<UpdateUserDto, User>();
             //Map BorrowBook
             CreateMap<BorrowRecord, BorrowRecordDto>()
             .ForMember(dest => dest.BorrowId, opt => opt.MapFrom(src => src.Id))
@@ -43,6 +48,11 @@ namespace BussinessLayer.Mappings
             CreateMap<Category, CategoryDto>().ReverseMap();
             CreateMap<CreateCategoryDto, Category>();
             CreateMap<UpdateCategoryDto, Category>();
+
+            //map cart
+            CreateMap<CartItem, CartItemDto>()
+            .ForMember(dest => dest.BookTitle, opt => opt.MapFrom(src => src.Book.Title))
+            .ForMember(dest => dest.AuthorName, opt => opt.MapFrom(src => src.Book.Author.AuthorName));
         }
     }
 }

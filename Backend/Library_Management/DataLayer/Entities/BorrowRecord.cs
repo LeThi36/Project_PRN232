@@ -19,8 +19,10 @@ public partial class BorrowRecord : BaseEntity
     public string Status { get; set; } = null!;
 
     public decimal Fine { get; set; }
+    public string BorrowOrderId { get; set; } = null!;
 
     public virtual BookCopy Copy { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
+    public virtual BorrowOrder BorrowOrder { get; set; } = null!;
 }
