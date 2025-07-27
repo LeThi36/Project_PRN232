@@ -33,6 +33,8 @@ namespace BussinessLayer.Mappings
             //Map User
             CreateMap<User, UserDto>()
             .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.ToString()));
+            CreateMap<CreateUserDto, User>();
+            CreateMap<UpdateUserDto, User>();
             //Map BorrowBook
             CreateMap<BorrowRecord, BorrowRecordDto>()
     .ForMember(dest => dest.BorrowId, opt => opt.MapFrom(src => src.Id))
