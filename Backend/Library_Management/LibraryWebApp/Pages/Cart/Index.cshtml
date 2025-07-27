@@ -1,0 +1,182 @@
+﻿@page
+@model LibraryWebApp.Pages.Cart.IndexModel
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<!-- Breadcumb Section Start -->
+<div class="breadcrumb-wrapper">
+    <div class="book1">
+        <img src="assets/img/hero/book1.png" alt="book">
+    </div>
+    <div class="book2">
+        <img src="assets/img/hero/book2.png" alt="book">
+    </div>
+    <div class="container">
+        <div class="page-heading">
+            <h1>Cart</h1>
+            <div class="page-header">
+                <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
+                    <li><a href="index.html">Home</a></li>
+                    <li><i class="fa-solid fa-chevron-right"></i></li>
+                    <li>Cart</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Shop Cart Section Start -->
+<div class="cart-section section-padding">
+    <div class="container">
+        <div class="main-cart-wrapper">
+            <div class="row g-5">
+                <!-- Cart Table -->
+                <div class="col-xl-9">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.CartItems)
+                                {
+                                    <tr>
+                                        <td>
+                                            <span class="d-flex gap-5 align-items-center">
+                                                <span class="cart">
+                                                    <img src="assets/img/shop-cart/01.png" alt="book" />
+                                                </span>
+                                                <span class="cart-title">
+                                                    @item.BookTitle<br />
+                                                    <small class="text-muted">by @item.AuthorName</small>
+                                                </span>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="quantity-basket">
+                                                <span class="qty">
+                                                    <button class="qtyminus" aria-hidden="true">−</button>
+                                                    <input type="number" class="quantity-input" data-book-id="@item.BookId" min="1" max="10" step="1" value="@item.Quantity" />
+                                                    <button class="qtyplus" aria-hidden="true">+</button>
+                                                </span>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Cart Summary Section -->
+                <div class="col-xl-3">
+                    <div class="table-responsive cart-total">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Cart Summary</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span class="d-flex gap-5 align-items-center justify-content-between">
+                                            <span class="sub-title">Total Books:</span>
+                                            <span class="sub-price" id="totalQuantity">@Model.TotalQuantity</span>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="book-list">
+                                            <strong>Book Titles:</strong>
+                                            <ul id="cartBookList">
+                                                @* Ban đầu show bằng Razor, sau sẽ bị JS thay thế *@
+                                                @foreach (var item in Model.CartItems)
+                                                {
+                                                    <li>@item.BookTitle     X    @item.Quantity</li>
+                                                }
+                                            </ul>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <a href="checkout.html" class="theme-btn">Proceed to checkout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Xử lý khi nhập trực tiếp vào input
+            $('.quantity-input').on('change', function () {
+                const bookId = $(this).data('book-id');
+                const quantity = $(this).val();
+                const studentCode = getCookie("StudentCode");
+
+                $.ajax({
+                    url: `https://localhost:7092/api/Cart/update?studentCode=${studentCode}&bookId=${bookId}&quantity=${quantity}`,
+                    type: 'PUT',
+                    success: function () {
+                        refreshCartSummary(studentCode);
+                    },
+                    error: function () {
+                        alert("Failed to update quantity.");
+                    }
+                });
+            });
+
+            // Xử lý nút cộng
+            $('.qtyplus').click(function () {
+                const $input = $(this).siblings('.quantity-input');
+                let quantity = parseInt($input.val());
+                if (quantity < 10) {
+                    quantity++;
+                    $input.val(quantity).trigger('change');
+                }
+            });
+
+            // Xử lý nút trừ
+            $('.qtyminus').click(function () {
+                const $input = $(this).siblings('.quantity-input');
+                let quantity = parseInt($input.val());
+                if (quantity > 1) {
+                    quantity--;
+                    $input.val(quantity).trigger('change');
+                }
+            });
+
+            function refreshCartSummary(studentCode) {
+                $.get(`https://localhost:7092/api/Cart/${studentCode}`, function (data) {
+                    let totalQuantity = 0;
+                    let html = '';
+                    data.forEach(item => {
+                        totalQuantity += item.quantity;
+                        html += `<li>${item.bookTitle} (x${item.quantity})</li>`;
+                    });
+
+                    $('#totalQuantity').text(totalQuantity);
+                    $('#cartBookList').html(html);
+                });
+            }
+
+
+            function getCookie(name) {
+                let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+                if (match) return match[2];
+                return '';
+            }
+        });
+    </script>
+}

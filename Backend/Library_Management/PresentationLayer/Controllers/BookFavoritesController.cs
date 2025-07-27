@@ -30,11 +30,23 @@ namespace PresentationLayer.Controllers
             }
         }
 
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetFavoritesByUser(string userId)
+        [HttpGet("student/{studentCode}")]
+        public async Task<IActionResult> GetFavoritesByStudentCode(string studentCode)
         {
-            var result = await _service.GetFavoritesByUserAsync(userId);
+            var result = await _service.GetFavoritesByStudentCodeAsync(studentCode);
             return Ok(result);
+        }
+        [HttpDelete("{bookId}/student/{studentCode}")]
+        public async Task<IActionResult> RemoveFavorite(string bookId, string studentCode)
+        {
+            var success = await _service.RemoveFavoriteByStudentCodeAsync(bookId, studentCode);
+
+            if (!success)
+            {
+                return NotFound(new { message = "Favorite not found." });
+            }
+
+            return NoContent(); // 204: Xoá thành công, không trả về dữ liệu
         }
     }
 }

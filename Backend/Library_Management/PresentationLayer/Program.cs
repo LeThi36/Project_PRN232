@@ -13,15 +13,15 @@ using System.IdentityModel.Tokens.Jwt;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Đăng ký DbContext
 builder.Services.AddDbContext<ProjectPrn232Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Cấu hình Dependency Injection
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(IPaginationRepository<>), typeof(PaginationRepository<>));
 
@@ -36,10 +36,21 @@ builder.Services.AddScoped<IPublisherService, PublisherService>();
 builder.Services.AddScoped<IBookCopyService, BookCopyService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICartService, CartService>();
 
-
-// Register AutoMapper
+// Đăng ký AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+// ✅ Cấu hình CORS cho phép frontend gọi API
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("https://localhost:7007") // Port frontend
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 // Cấu hình xác thực JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -56,7 +67,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
 
-        // Thêm kiểm tra custom để vô hiệu hóa token (blacklist)
+        // Thêm kiểm tra token bị thu hồi
         options.Events = new JwtBearerEvents
         {
             OnTokenValidated = async context =>
@@ -68,15 +79,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     return;
                 }
 
-                var tokenString = token.RawData; // Lấy chuỗi token gốc
+                var tokenString = token.RawData;
 
-                // Lấy dịch vụ IRevokedTokenService từ service provider
                 var revokedTokenService = context.HttpContext.RequestServices.GetRequiredService<IRevokedTokenService>();
-
-                // Kiểm tra xem token có bị thu hồi không
                 if (await revokedTokenService.IsTokenRevokedAsync(tokenString))
                 {
-                    context.Fail("Token đã bị vô hiệu hóa."); // Vô hiệu hóa ngữ cảnh xác thực
+                    context.Fail("Token đã bị vô hiệu hóa.");
                 }
             }
         };
@@ -94,6 +102,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// ✅ Áp dụng CORS ở đây (trước Authentication)
+app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();

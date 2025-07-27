@@ -41,14 +41,30 @@ namespace BussinessLayer.Services
             return _mapper.Map<BookFavoriteDto>(result);
         }
 
-        public async Task<IEnumerable<BookFavoriteDto>> GetFavoritesByUserAsync(string userId)
+        public async Task<IEnumerable<BookFavoriteDto>> GetFavoritesByStudentCodeAsync(string studentCode)
         {
             var favorites = await _context.BookFavorites
-                .Where(f => f.UserId == userId)
                 .Include(f => f.Book)
+                    .ThenInclude(b => b.Author)
+                .Include(f => f.User)
+                .Where(f => f.User.StudentCode == studentCode)
                 .ToListAsync();
 
             return _mapper.Map<IEnumerable<BookFavoriteDto>>(favorites);
+        }
+        public async Task<bool> RemoveFavoriteByStudentCodeAsync(string bookId, string studentCode)
+        {
+            var favorite = await _context.BookFavorites
+                .Include(f => f.User)
+                .FirstOrDefaultAsync(f => f.BookId == bookId && f.User.StudentCode == studentCode);
+
+            if (favorite == null)
+                return false;
+
+            _context.BookFavorites.Remove(favorite);
+            await _context.SaveChangesAsync();
+
+            return true;
         }
     }
 }

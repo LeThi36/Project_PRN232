@@ -10,29 +10,20 @@ public partial class ProjectPrn232Context : DbContext
     public ProjectPrn232Context(DbContextOptions<ProjectPrn232Context> options) : base(options) { }
 
     public virtual DbSet<Author> Authors { get; set; }
-
     public virtual DbSet<Book> Books { get; set; }
-
     public virtual DbSet<BookCopy> BookCopies { get; set; }
-
     public virtual DbSet<BookFavorite> BookFavorites { get; set; }
-
     public virtual DbSet<BookReservation> BookReservations { get; set; }
-
     public virtual DbSet<BookReview> BookReviews { get; set; }
-
     public virtual DbSet<BorrowRecord> BorrowRecords { get; set; }
-
     public virtual DbSet<Category> Categories { get; set; }
-
     public virtual DbSet<Event> Events { get; set; }
-
     public virtual DbSet<Publisher> Publishers { get; set; }
-
     public virtual DbSet<Role> Roles { get; set; }
-
     public virtual DbSet<User> Users { get; set; }
 
+    public DbSet<Cart> Carts { get; set; }
+    public DbSet<CartItem> CartItems { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Author>(entity =>
@@ -248,6 +239,7 @@ public partial class ProjectPrn232Context : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("category_name");
         });
+
 
         modelBuilder.Entity<Event>(entity =>
         {

@@ -10,6 +10,7 @@ namespace BussinessLayer.Services.Interface
     public interface IBookFavoriteService
     {
         Task<BookFavoriteDto> AddFavoriteAsync(BookFavoriteCreateDto dto);
-        Task<IEnumerable<BookFavoriteDto>> GetFavoritesByUserAsync(string userId);
+        Task<IEnumerable<BookFavoriteDto>> GetFavoritesByStudentCodeAsync(string studentCode);
+        Task<bool> RemoveFavoriteByStudentCodeAsync(string bookId, string studentCode);
     }
 }
