@@ -134,11 +134,10 @@ namespace PresentationLayer.Controllers
                 {
                     return NotFound($"Book with ID {id} not found or could not be deleted.");
                 }
-                return NoContent(); // 204 No Content for successful deletion
+                return NoContent();
             }
             catch (System.Exception ex)
             {
-                // Log the exception
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
