@@ -26,7 +26,7 @@ namespace BussinessLayer.Services
             var claims = new[]
             {
                 // Sử dụng ClaimTypes.NameIdentifier cho một ID người dùng duy nhất, hoặc một chuỗi tùy chỉnh cho "StudentCode"
-                new Claim(ClaimTypes.NameIdentifier, user.StudentCode), // Hoặc "studentCode", hoặc "sub"
+                new Claim(ClaimTypes.NameIdentifier, user.Id), // Hoặc "studentCode", hoặc "sub"
                 new Claim(ClaimTypes.Role, ((int)user.Role.RoleName).ToString()) // Đúng cho vai trò
             };
 
@@ -37,7 +37,7 @@ namespace BussinessLayer.Services
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(15), // Xem xét việc đặt thời gian này có thể cấu hình được
+                expires: DateTime.Now.AddMinutes(30), // Xem xét việc đặt thời gian này có thể cấu hình được
                 signingCredentials: creds
             );
 

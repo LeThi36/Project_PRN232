@@ -62,6 +62,7 @@ namespace PresentationLayer.Controllers
             var result = await _userService.UpdateUserAsync(dto);
             return result ? NoContent() : NotFound();
         }
+
         [HttpPut("{id}/ban")]
         public async Task<IActionResult> BanUser(string id)
         {
