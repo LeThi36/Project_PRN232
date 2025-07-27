@@ -12,5 +12,6 @@ namespace BussinessLayer.Services.Interface
     {
         Task<User?> GetUserByStudentCodeAsync(string studentCode);
         Task<IEnumerable<UserDto>> GetStudentsAsync();
+        Task<UserDto?> UpdateProfileAsync(string userId, UpdateProfileDto updateDto);
     }
 }
