@@ -74,7 +74,6 @@
     <table class="table table-bordered table-striped">
         <thead class="table-light">
             <tr>
-                <th>#</th>
                 <th>Copy Code</th>
                 <th>Status</th>
                 <th>Created At</th>
@@ -88,7 +87,6 @@
                 foreach (var copy in Model.BookCopies)
                 {
                     <tr>
-                        <td>@count++</td>
                         <td>@copy.CopyCode</td>
                         <td>@copy.Status</td>
                         <td>@copy.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</td>
