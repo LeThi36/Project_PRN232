@@ -2,6 +2,7 @@
 using BussinessLayer.Services.Interface;
 using DataLayer.Entities;
 using DataLayer.Repositories.Abstraction;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,13 @@ namespace BussinessLayer.Services
         public class PublisherService : IPublisherService
     {
             private readonly IGenericRepository<Publisher> _publisherRepository;
+        private readonly ProjectPrn232Context _context;
 
-            public PublisherService(IGenericRepository<Publisher> publisherRepository)
+        public PublisherService(IGenericRepository<Publisher> publisherRepository, ProjectPrn232Context context)
             {
                 _publisherRepository = publisherRepository;
-            }
+            _context = context;
+        }
 
             public async Task<Publisher> AddPublisher(PublisherCreateDto publisherDto)
             {
@@ -100,6 +103,31 @@ namespace BussinessLayer.Services
 
                 await _publisherRepository.RemoveAsync(publisherToRemove);
             }
+
+        public async Task<(IEnumerable<Publisher> Data, int TotalCount, int PageIndex, int PageSize)>
+    GetPagedPublishersAsync(string? search, int pageIndex, int pageSize)
+        {
+            var query = _context.Publishers.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.ToLower();
+                query = query.Where(p =>
+                    p.PublisherName.ToLower().Contains(search) ||
+                    p.Id.ToLower().Contains(search));
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var data = await query
+                .OrderByDescending(p => p.CreatedAt)
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (data, totalCount, pageIndex, pageSize);
         }
+
     }
+}
 
