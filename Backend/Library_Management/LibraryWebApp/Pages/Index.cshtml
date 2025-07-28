@@ -38,98 +38,15 @@
 
 <body>
 
-    @* <!-- Registration Modal -->
-    <div class="modal fade" id="registrationModal" tabindex="-1" aria-labelledby="registrationModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-    <div class="modal-content">
-    <div class="modal-body">
-    <div class="close-btn">
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
-    <div class="identityBox">
-    <div class="form-wrapper">
-    <h1 id="registrationModalLabel">Create account!</h1>
-    <input class="inputField" type="text" name="name" id="name" placeholder="User Name">
-    <input class="inputField" type="email" name="email" placeholder="Email Address">
-    <input class="inputField" type="password" name="password" placeholder="Enter Password">
-    <input class="inputField" type="password" name="password"
-    placeholder="Enter Confirm Password">
-    <div class="input-check remember-me">
-    <div class="checkbox-wrapper">
-    <input type="checkbox" class="form-check-input" name="save-for-next"
-    id="rememberMe">
-    <label for="rememberMe">Remember me</label>
-    </div>
-    <div class="text"> <a href="index-2.html">Forgot Your password?</a> </div>
-    </div>
-    <div class="loginBtn">
-    <a href="index-2.html" class="theme-btn rounded-0"> Log in </a>
-    </div>
-    <div class="orting-badge">
-    Or
-    </div>
-    <div>
-    <a class="another-option" href="https://www.google.com/">
-    <img src="~/img/google.png" alt="google">
-    Continue With Google
-    </a>
-    </div>
-    <div>
-    <a class="another-option another-option-two" href="https://www.facebook.com/">
-    <img src="~/img/facebook.png" alt="google">
-    Continue With Facebook
-    </a>
-    </div>
-    <div class="form-check-3 d-flex align-items-center from-customradio-2 mt-3">
-    <input class="form-check-input" type="radio" name="flexRadioDefault">
-    <label class="form-check-label">
-    I Accept Your Terms & Conditions
-    </label>
-    </div>
-    </div>
-
-    <div class="banner">
-    <button type="button" class="rounded-0 login-btn" data-bs-toggle="modal"
-    data-bs-target="#loginModal">
-    Log in
-    </button>
-    <button type="button" class="theme-btn rounded-0 register-btn" data-bs-toggle="modal"
-    data-bs-target="#registrationModal">
-    Create
-    Account
-    </button>
-    <div class="signUpBg">
-    <img src="~/img/registrationbg.jpg" alt="signUpBg">
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div> *@
-
-    @* <section class="debug-books"> *@
-    @*     <h2>📚 Debug - Featured Books</h2> *@
-    @*     <ul> *@
-    @*         @foreach (var book in Model.FeaturedBooks) *@
-    @*         { *@
-    @*             <li> *@
-    @*                 <strong>@book.Title</strong> — @book.AuthorName <br /> *@
-    @*                 <small>@(book.ImageUrl ?? "no image")</small> *@
-    @*             </li> *@
-    @*         } *@
-    @*     </ul> *@
-    @* </section> *@
-
-    <!-- Shop Section start  -->
+    
+    <!-- Books Section start  -->
     <section class="shop-section section-padding fix pt-0">
         <div class="container">
             <div class="section-title-area">
                 <div class="section-title">
-                    <h2 class="wow fadeInUp" data-wow-delay=".3s">Featured Books</h2>
+                    <h2 class="wow fadeInUp" data-wow-delay=".3s">Top Books</h2>
                 </div>
-                <a href="shop.html" class="theme-btn transparent-btn wow fadeInUp" data-wow-delay=".5s">
+                <a href="/Book/BookSearch" class="theme-btn transparent-btn wow fadeInUp" data-wow-delay=".5s">
                     Explore More <i class="fa-solid fa-arrow-right-long"></i>
                 </a>
             </div>
@@ -184,673 +101,84 @@
         </div>
     </section>
 
-    <!-- Book Catagories Section start  -->
-    <section class="book-catagories-section fix section-padding">
-        <div class="container">
-            <div class="book-catagories-wrapper">
-                <div class="section-title text-center">
-                    <h2 class="wow fadeInUp" data-wow-delay=".3s">Top Categories Book</h2>
-                </div>
-                <div class="array-button">
-                    <button class="array-prev"><i class="fal fa-arrow-left"></i></button>
-                    <button class="array-next"><i class="fal fa-arrow-right"></i></button>
-                </div>
-                <div class="swiper book-catagories-slider">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <div class="book-catagories-items">
-                                <div class="book-thumb">
-                                    <img src="~/img/book-categori/01.png" alt="img">
-                                    <div class="circle-shape">
-                                        <img src="~/img/book-categori/circle-shape.png" alt="shape-img">
-                                    </div>
-                                </div>
-                                <div class="number"> 01 </div>
-                                <h3><a href="shop-details.html">Romance Books (80)</a></h3>
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="book-catagories-items">
-                                <div class="book-thumb">
-                                    <img src="~/img/book-categori/02.png" alt="img">
-                                    <div class="circle-shape">
-                                        <img src="~/img/book-categori/circle-shape.png" alt="shape-img">
-                                    </div>
-                                </div>
-                                <div class="number"> 02 </div>
-                                <h3><a href="shop-details.html">Design Low Book (6)</a></h3>
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="book-catagories-items">
-                                <div class="book-thumb">
-                                    <img src="~/img/book-categori/03.png" alt="img">
-                                    <div class="circle-shape">
-                                        <img src="~/img/book-categori/circle-shape.png" alt="shape-img">
-                                    </div>
-                                </div>
-                                <div class="number"> 03 </div>
-                                <h3><a href="shop-details.html">safe Home (5)</a></h3>
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="book-catagories-items">
-                                <div class="book-thumb">
-                                    <img src="~/img/book-categori/04.png" alt="img">
-                                    <div class="circle-shape">
-                                        <img src="~/img/book-categori/circle-shape.png" alt="shape-img">
-                                    </div>
-                                </div>
-                                <div class="number"> 04 </div>
-                                <h3><a href="shop-details.html">Grow flower (7)</a></h3>
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="book-catagories-items">
-                                <div class="book-thumb">
-                                    <img src="~/img/book-categori/05.png" alt="img">
-                                    <div class="circle-shape">
-                                        <img src="~/img/book-categori/circle-shape.png" alt="shape-img">
-                                    </div>
-                                </div>
-                                <div class="number"> 05 </div>
-                                <h3><a href="shop-details.html">Adventure book (4)</a></h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Shop Section start  -->
-    <section class="shop-section section-padding fix">
-        <div class="container">
-            <div class="section-title-area">
-                <div class="section-title mb- wow fadeInUp" data-wow-delay=".3s">
-                    <h2>Bookle Top Books</h2>
-                </div>
-                <a href="shop.html" class="theme-btn transparent-btn wow fadeInUp" data-wow-delay=".5s">
-                    Explore More <i class="fa-solid fa-arrow-right-long"></i>
-                </a>
-            </div>
-            <div class="book-shop-wrapper">
-                <div class="shop-box-items style-2">
-                    <div class="book-thumb center">
-                        <a href="shop-details"><img src="~/img/book/05.png" alt="img"></a>
-                        <ul class="shop-icon d-grid justify-content-center align-items-center">
-                            <li>
-                                <a href="shop-cart.html"><i class="far fa-heart"></i></a>
-                            </li>
-                            <li>
-                                <a href="shop-cart.html">
-
-                                    <img class="icon" src="~/img/icon/shuffle.svg" alt="svg-icon">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="shop-details.html"><i class="far fa-eye"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="shop-content">
-                        <h5> Design Low Book </h5>
-                        <h3><a href="shop-details.html">Flovely and Unicom <br> Erna</a></h3>
-                        <ul class="price-list">
-                            <li>$30.00</li>
-                            <li>
-                                <del>$39.99</del>
-                            </li>
-                        </ul>
-                        <ul class="author-post">
-                            <li class="authot-list">
-                                <span class="thumb">
-                                    <img src="~/img/testimonial/client-1.png" alt="img">
-                                </span>
-                                <span class="content">(Author) Albert</span>
-                            </li>
-                            <li class="star">
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-regular fa-star"></i>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="shop-button">
-                        <a href="shop-details.html" class="theme-btn">
-                            <i class="fa-solid fa-basket-shopping"></i> Add To
-                            Cart
-                        </a>
-                    </div>
-                </div>
-
-                <div class="shop-box-items style-2">
-                    <div class="book-thumb center">
-                        <a href="shop-details"><img src="~/img/book/04.png" alt="img"></a>
-                        <ul class="post-box">
-                            <li>
-                                Hot
-                            </li>
-                        </ul>
-                        <ul class="shop-icon d-grid justify-content-center align-items-center">
-                            <li>
-                                <a href="shop-cart.html"><i class="far fa-heart"></i></a>
-                            </li>
-                            <li>
-                                <a href="shop-cart.html">
-
-                                    <img class="icon" src="~/img/icon/shuffle.svg" alt="svg-icon">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="shop-details.html"><i class="far fa-eye"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="shop-content">
-                        <h5> Design Low Book </h5>
-                        <h3><a href="shop-details.html">Qple GPad With Retinay<br> Sispla</a></h3>
-                        <ul class="price-list">
-                            <li>$30.00</li>
-                            <li>
-                                <del>$39.99</del>
-                            </li>
-                        </ul>
-                        <ul class="author-post">
-                            <li class="authot-list">
-                                <span class="thumb">
-                                    <img src="~/img/testimonial/client-2.png" alt="img">
-                                </span>
-                                <span class="content">Wilson</span>
-                            </li>
-                            <li class="star">
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-regular fa-star"></i>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="shop-button">
-                        <a href="shop-details.html" class="theme-btn">
-                            <i class="fa-solid fa-basket-shopping"></i> Add To
-                            Cart
-                        </a>
-                    </div>
-                </div>
-
-                <div class="shop-box-items style-2">
-                    <div class="book-thumb center">
-                        <a href="shop-details"><img src="~/img/book/03.png" alt="img"></a>
-                        <ul class="shop-icon d-grid justify-content-center align-items-center">
-                            <li>
-                                <a href="shop-cart.html"><i class="far fa-heart"></i></a>
-                            </li>
-                            <li>
-                                <a href="shop-cart.html">
-
-                                    <img class="icon" src="~/img/icon/shuffle.svg" alt="svg-icon">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="shop-details.html"><i class="far fa-eye"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="shop-content">
-                        <h5> Design Low Book </h5>
-                        <h3><a href="shop-details.html">Simple Things You To <br> Save BOOK</a></h3>
-                        <ul class="price-list">
-                            <li>$30.00</li>
-                            <li>
-                                <del>$39.99</del>
-                            </li>
-                        </ul>
-                        <ul class="author-post">
-                            <li class="authot-list">
-                                <span class="thumb">
-                                    <img src="~/img/testimonial/client-3.png" alt="img">
-                                </span>
-                                <span class="content">Wilson</span>
-                            </li>
-                            <li class="star">
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-regular fa-star"></i>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="shop-button">
-                        <a href="shop-details.html" class="theme-btn">
-                            <i class="fa-solid fa-basket-shopping"></i> Add To
-                            Cart
-                        </a>
-                    </div>
-                </div>
-
-                <div class="shop-box-items style-2">
-                    <div class="book-thumb center">
-                        <a href="shop-details"><img src="~/img/book/02.png" alt="img"></a>
-                        <ul class="post-box">
-                            <li>
-                                Hot
-                            </li>
-                            <li>
-                                -30%
-                            </li>
-                        </ul>
-                        <ul class="shop-icon d-grid justify-content-center align-items-center">
-                            <li>
-                                <a href="shop-cart.html"><i class="far fa-heart"></i></a>
-                            </li>
-                            <li>
-                                <a href="shop-cart.html">
-
-                                    <img class="icon" src="~/img/icon/shuffle.svg" alt="svg-icon">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="shop-details.html"><i class="far fa-eye"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="shop-content">
-                        <h5> Design Low Book </h5>
-                        <h3><a href="shop-details.html">How Deal With Very <br> Bad BOOK</a></h3>
-                        <ul class="price-list">
-                            <li>$30.00</li>
-                            <li>
-                                <del>$39.99</del>
-                            </li>
-                        </ul>
-                        <ul class="author-post">
-                            <li class="authot-list">
-                                <span class="thumb">
-                                    <img src="~/img/testimonial/client-4.png" alt="img">
-                                </span>
-                                <span class="content">Esther</span>
-                            </li>
-                            <li class="star">
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-regular fa-star"></i>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="shop-button">
-                        <a href="shop-details.html" class="theme-btn">
-                            <i class="fa-solid fa-basket-shopping"></i> Add To
-                            Cart
-                        </a>
-                    </div>
-                </div>
-
-                <div class="cta-shop-box">
-                    <h2 class="wow fadeInUp" data-wow-delay=".2s">
-                        Find Your Nest
-                        Books!
-                    </h2>
-                    <h6 class="wow fadeInUp" data-wow-delay=".4s">And get your 25% discount now!</h6>
-                    <a href="shop.html" class="theme-btn white-bg wow fadeInUp" data-wow-delay=".6s">
-                        Shop Now <i class="fa-solid fa-arrow-right-long"></i>
-                    </a>
-                    <div class="girl-shape">
-                        <img src="~/img/girl-shape.png" alt="shape-img">
-                    </div>
-                    <div class="circle-shape">
-                        <img src="~/img/circle-shape.png" alt="shape-img">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Top Ratting Book Section start  -->
-    <section class="top-ratting-book-section fix section-padding section-bg">
-        <div class="container">
-            <div class="top-ratting-book-wrapper">
-                <div class="section-title-area">
-                    <div class="section-title">
-                        <h2 class="wow fadeInUp" data-wow-delay=".3s">Top Rating Books</h2>
-                    </div>
-                    <a href="shop.html" class="theme-btn transparent-btn wow fadeInUp" data-wow-delay=".5s">
-                        View More <i class="fa-solid fa-arrow-right-long"></i>
-                    </a>
-                </div>
-                <div class="row">
-                    <div class="col-xl-6 wow fadeInUp" data-wow-delay=".3s">
-                        <div class="top-ratting-box-items">
-                            <div class="book-thumb">
-                                <a href="shop-details.html">
-                                    <img src="~/img/top-book/01.png" alt="img">
-                                </a>
-                            </div>
-                            <div class="book-content">
-                                <div class="title-header">
-                                    <div>
-                                        <h5> Design Low Book </h5>
-                                        <h3>
-                                            <a href="shop-details.html">Simple Things You To Save BOOK</a>
-                                        </h3>
-                                    </div>
-                                    <ul class="shop-icon d-flex justify-content-center align-items-center">
-                                        <li>
-                                            <a href="shop-cart.html"><i class="far fa-heart"></i></a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-cart.html">
-                                                <img class="icon" src="~/img/icon/shuffle.svg" alt="svg-icon">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-details.html"><i class="far fa-eye"></i></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <span class="mt-10">$30.00</span>
-                                <ul class="author-post">
-                                    <li class="authot-list">
-                                        <span class="thumb">
-                                            <img src="~/img/testimonial/client-2.png" alt="img">
-                                        </span>
-                                        <span class="content mt-10">Wilson</span>
-                                    </li>
-                                </ul>
-                                <div class="shop-btn">
-                                    <div class="star">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-regular fa-star"></i>
-                                    </div>
-                                    <a href="shop-details.html" class="theme-btn">
-                                        <i class="fa-solid fa-basket-shopping"></i> Add To Cart
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 wow fadeInUp" data-wow-delay=".5s">
-                        <div class="top-ratting-box-items">
-                            <div class="book-thumb">
-                                <a href="shop-details.html">
-                                    <img src="~/img/top-book/02.png" alt="img">
-                                </a>
-                            </div>
-                            <div class="book-content">
-                                <div class="title-header">
-                                    <div>
-                                        <h5> Design Low Book </h5>
-                                        <h3>
-                                            <a href="shop-details.html">How Deal With Very Bad BOOK</a>
-                                        </h3>
-                                    </div>
-                                    <ul class="shop-icon d-flex justify-content-center align-items-center">
-                                        <li>
-                                            <a href="shop-cart.html"><i class="far fa-heart"></i></a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-cart.html">
-
-                                                <img class="icon" src="~/img/icon/shuffle.svg" alt="svg-icon">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-details.html"><i class="far fa-eye"></i></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <span class="mt-10">$39.00</span>
-                                <ul class="author-post">
-                                    <li class="authot-list">
-                                        <span class="thumb">
-                                            <img src="~/img/testimonial/client-2.png" alt="img">
-                                        </span>
-                                        <span class="content mt-10">Wilson</span>
-                                    </li>
-                                </ul>
-                                <div class="shop-btn">
-                                    <div class="star">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-regular fa-star"></i>
-                                    </div>
-                                    <a href="shop-details.html" class="theme-btn">
-                                        <i class="fa-solid fa-basket-shopping"></i> Add To Cart
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 wow fadeInUp" data-wow-delay=".3s">
-                        <div class="top-ratting-box-items">
-                            <div class="book-thumb">
-                                <a href="shop-details.html">
-                                    <img src="~/img/top-book/03.png" alt="img">
-                                </a>
-                            </div>
-                            <div class="book-content">
-                                <div class="title-header">
-                                    <div>
-                                        <h5> Design Low Book </h5>
-                                        <h3>
-                                            <a href="shop-details.html">Qple GPad With Retina Sisplay</a>
-                                        </h3>
-                                    </div>
-                                    <ul class="shop-icon d-flex justify-content-center align-items-center">
-                                        <li>
-                                            <a href="shop-cart.html"><i class="far fa-heart"></i></a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-cart.html">
-                                                <img class="icon" src="~/img/icon/shuffle.svg" alt="svg-icon">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-details.html"><i class="far fa-eye"></i></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <span class="mt-10">$30.00</span>
-                                <ul class="author-post">
-                                    <li class="authot-list">
-                                        <span class="thumb">
-                                            <img src="~/img/testimonial/client-2.png" alt="img">
-                                        </span>
-                                        <span class="content mt-10">Wilson</span>
-                                    </li>
-                                </ul>
-                                <div class="shop-btn">
-                                    <div class="star">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-regular fa-star"></i>
-                                    </div>
-                                    <a href="shop-details.html" class="theme-btn">
-                                        <i class="fa-solid fa-basket-shopping"></i> Add To Cart
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 wow fadeInUp" data-wow-delay=".5s">
-                        <div class="top-ratting-box-items">
-                            <div class="book-thumb">
-                                <a href="shop-details.html">
-                                    <img src="~/img/top-book/04.png" alt="img">
-                                </a>
-                            </div>
-                            <div class="book-content">
-                                <div class="title-header">
-                                    <div>
-                                        <h5> Design Low Book </h5>
-                                        <h3>
-                                            <a href="shop-details.html">Flovely and Unicom Erna</a>
-                                        </h3>
-                                    </div>
-                                    <ul class="shop-icon d-flex justify-content-center align-items-center">
-                                        <li>
-                                            <a href="shop-cart.html"><i class="far fa-heart"></i></a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-cart.html">
-
-                                                <img class="icon" src="~/img/icon/shuffle.svg" alt="svg-icon">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-details.html"><i class="far fa-eye"></i></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <span class="mt-10">$19.00</span>
-                                <ul class="author-post">
-                                    <li class="authot-list">
-                                        <span class="thumb">
-                                            <img src="~/img/testimonial/client-2.png" alt="img">
-                                        </span>
-                                        <span class="content mt-10">Wilson</span>
-                                    </li>
-                                </ul>
-                                <div class="shop-btn">
-                                    <div class="star">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-regular fa-star"></i>
-                                    </div>
-                                    <a href="shop-details.html" class="theme-btn">
-                                        <i class="fa-solid fa-basket-shopping"></i> Add To Cart
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 wow fadeInUp" data-wow-delay=".3s">
-                        <div class="top-ratting-box-items">
-                            <div class="book-thumb">
-                                <a href="shop-details.html">
-                                    <img src="~/img/top-book/05.png" alt="img">
-                                </a>
-                            </div>
-                            <div class="book-content">
-                                <div class="title-header">
-                                    <div>
-                                        <h5> Design Low Book </h5>
-                                        <h3>
-                                            <a href="shop-details.html">Castle In The Sky</a>
-                                        </h3>
-                                    </div>
-                                    <ul class="shop-icon d-flex justify-content-center align-items-center">
-                                        <li>
-                                            <a href="shop-cart.html"><i class="far fa-heart"></i></a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-cart.html">
-
-                                                <img class="icon" src="~/img/icon/shuffle.svg" alt="svg-icon">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-details.html"><i class="far fa-eye"></i></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <span class="mt-10">$16.00</span>
-                                <ul class="author-post">
-                                    <li class="authot-list">
-                                        <span class="thumb">
-                                            <img src="~/img/testimonial/client-2.png" alt="img">
-                                        </span>
-                                        <span class="content mt-10">Wilson</span>
-                                    </li>
-                                </ul>
-                                <div class="shop-btn">
-                                    <div class="star">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-regular fa-star"></i>
-                                    </div>
-                                    <a href="shop-details.html" class="theme-btn">
-                                        <i class="fa-solid fa-basket-shopping"></i> Add To Cart
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 wow fadeInUp" data-wow-delay=".5s">
-                        <div class="top-ratting-box-items">
-                            <div class="book-thumb">
-                                <a href="shop-details.html">
-                                    <img src="~/img/top-book/06.png" alt="img">
-                                </a>
-                            </div>
-                            <div class="book-content">
-                                <div class="title-header">
-                                    <div>
-                                        <h5> Design Low Book </h5>
-                                        <h3>
-                                            <a href="shop-details.html">The Hidden Mystery Behind</a>
-                                        </h3>
-                                    </div>
-                                    <ul class="shop-icon d-flex justify-content-center align-items-center">
-                                        <li>
-                                            <a href="shop-cart.html"><i class="far fa-heart"></i></a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-cart.html">
-
-                                                <img class="icon" src="~/img/icon/shuffle.svg" alt="svg-icon">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-details.html"><i class="far fa-eye"></i></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <span class="mt-10">$30.00</span>
-                                <ul class="author-post">
-                                    <li class="authot-list">
-                                        <span class="thumb">
-                                            <img src="~/img/testimonial/client-2.png" alt="img">
-                                        </span>
-                                        <span class="content mt-10">Wilson</span>
-                                    </li>
-                                </ul>
-                                <div class="shop-btn">
-                                    <div class="star">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-regular fa-star"></i>
-                                    </div>
-                                    <a href="shop-details.html" class="theme-btn">
-                                        <i class="fa-solid fa-basket-shopping"></i> Add To Cart
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    @* <!-- Book Catagories Section start  --> *@
+    @* <section class="book-catagories-section fix section-padding"> *@
+    @*     <div class="container"> *@
+    @*         <div class="book-catagories-wrapper"> *@
+    @*             <div class="section-title text-center"> *@
+    @*                 <h2 class="wow fadeInUp" data-wow-delay=".3s">Top Categories Book</h2> *@
+    @*             </div> *@
+    @*             <div class="array-button"> *@
+    @*                 <button class="array-prev"><i class="fal fa-arrow-left"></i></button> *@
+    @*                 <button class="array-next"><i class="fal fa-arrow-right"></i></button> *@
+    @*             </div> *@
+    @*             <div class="swiper book-catagories-slider"> *@
+    @*                 <div class="swiper-wrapper"> *@
+    @*                     <div class="swiper-slide"> *@
+    @*                         <div class="book-catagories-items"> *@
+    @*                             <div class="book-thumb"> *@
+    @*                                 <img src="~/img/book-categori/01.png" alt="img"> *@
+    @*                                 <div class="circle-shape"> *@
+    @*                                     <img src="~/img/book-categori/circle-shape.png" alt="shape-img"> *@
+    @*                                 </div> *@
+    @*                             </div> *@
+    @*                             <div class="number"> 01 </div> *@
+    @*                             <h3><a href="shop-details.html">Romance Books (80)</a></h3> *@
+    @*                         </div> *@
+    @*                     </div> *@
+    @*                     <div class="swiper-slide"> *@
+    @*                         <div class="book-catagories-items"> *@
+    @*                             <div class="book-thumb"> *@
+    @*                                 <img src="~/img/book-categori/02.png" alt="img"> *@
+    @*                                 <div class="circle-shape"> *@
+    @*                                     <img src="~/img/book-categori/circle-shape.png" alt="shape-img"> *@
+    @*                                 </div> *@
+    @*                             </div> *@
+    @*                             <div class="number"> 02 </div> *@
+    @*                             <h3><a href="shop-details.html">Design Low Book (6)</a></h3> *@
+    @*                         </div> *@
+    @*                     </div> *@
+    @*                     <div class="swiper-slide"> *@
+    @*                         <div class="book-catagories-items"> *@
+    @*                             <div class="book-thumb"> *@
+    @*                                 <img src="~/img/book-categori/03.png" alt="img"> *@
+    @*                                 <div class="circle-shape"> *@
+    @*                                     <img src="~/img/book-categori/circle-shape.png" alt="shape-img"> *@
+    @*                                 </div> *@
+    @*                             </div> *@
+    @*                             <div class="number"> 03 </div> *@
+    @*                             <h3><a href="shop-details.html">safe Home (5)</a></h3> *@
+    @*                         </div> *@
+    @*                     </div> *@
+    @*                     <div class="swiper-slide"> *@
+    @*                         <div class="book-catagories-items"> *@
+    @*                             <div class="book-thumb"> *@
+    @*                                 <img src="~/img/book-categori/04.png" alt="img"> *@
+    @*                                 <div class="circle-shape"> *@
+    @*                                     <img src="~/img/book-categori/circle-shape.png" alt="shape-img"> *@
+    @*                                 </div> *@
+    @*                             </div> *@
+    @*                             <div class="number"> 04 </div> *@
+    @*                             <h3><a href="shop-details.html">Grow flower (7)</a></h3> *@
+    @*                         </div> *@
+    @*                     </div> *@
+    @*                     <div class="swiper-slide"> *@
+    @*                         <div class="book-catagories-items"> *@
+    @*                             <div class="book-thumb"> *@
+    @*                                 <img src="~/img/book-categori/05.png" alt="img"> *@
+    @*                                 <div class="circle-shape"> *@
+    @*                                     <img src="~/img/book-categori/circle-shape.png" alt="shape-img"> *@
+    @*                                 </div> *@
+    @*                             </div> *@
+    @*                             <div class="number"> 05 </div> *@
+    @*                             <h3><a href="shop-details.html">Adventure book (4)</a></h3> *@
+    @*                         </div> *@
+    @*                     </div> *@
+    @*                 </div> *@
+    @*             </div> *@
+    @*         </div> *@
+    @*     </div> *@
+    @* </section> *@
 
     <!-- Footer Section start  -->
     <!--<< All JS Plugins >>-->
