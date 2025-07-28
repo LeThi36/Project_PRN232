@@ -1,9 +1,24 @@
-﻿using LibraryWebApp.Handlers;
+﻿using BussinessLayer.Services.Interface;
+using BussinessLayer.Services;
+using LibraryWebApp.Handlers;
+using DataLayer.Repositories.Abstraction;
+using DataLayer.Repositories;
+using DataLayer.Entities;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IPublisherService, PublisherService>();
+builder.Services.AddScoped<IBookCopyService, BookCopyService>();
+builder.Services.AddDbContext<ProjectPrn232Context>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
 
 // Đăng ký IHttpContextAccessor để có thể truy cập HttpContext trong các service
 builder.Services.AddHttpContextAccessor();
