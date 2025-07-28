@@ -8,7 +8,7 @@ namespace DataLayer.Entities;
 public partial class ProjectPrn232Context : DbContext
 {
     public ProjectPrn232Context(DbContextOptions<ProjectPrn232Context> options) : base(options) { }
-
+    public ProjectPrn232Context() { }
     public virtual DbSet<Author> Authors { get; set; }
     public virtual DbSet<Book> Books { get; set; }
     public virtual DbSet<BookCopy> BookCopies { get; set; }
@@ -24,6 +24,15 @@ public partial class ProjectPrn232Context : DbContext
 
     public DbSet<Cart> Carts { get; set; }
     public DbSet<CartItem> CartItems { get; set; }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            // Chỉ dùng chuỗi này khi chạy design‑time (EF tools)
+            optionsBuilder.UseSqlServer("Server=localhost;Database=Project_PRN232;Trusted_Connection=True;TrustServerCertificate=True;");
+        }
+        base.OnConfiguring(optionsBuilder);
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Author>(entity =>

@@ -8,7 +8,8 @@ namespace BussinessLayer.DTOs.BookFavorite
 {
     public class BookFavoriteCreateDto
     {
-        public string UserId { get; set; } = null!;
+        //public string UserId { get; set; } = null!;
+        //public string? StudentCode { get; set; }
         public string BookId { get; set; } = null!;
     }
 }

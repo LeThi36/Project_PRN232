@@ -251,6 +251,52 @@ namespace DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BorrowOrder",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    BorrowDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TotalFine = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BorrowOrder", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BorrowOrder_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "carts",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    user_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_carts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_carts_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "book_reservations",
                 columns: table => new
                 {
@@ -291,6 +337,7 @@ namespace DataLayer.Migrations
                     ExtensionDateCount = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     fine = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    BorrowOrderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -298,6 +345,12 @@ namespace DataLayer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK__borrow_r__3213E83F6ECCAA08", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_borrow_records_BorrowOrder_BorrowOrderId",
+                        column: x => x.BorrowOrderId,
+                        principalTable: "BorrowOrder",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_borrow_records_book_copies",
                         column: x => x.copy_id,
@@ -308,6 +361,35 @@ namespace DataLayer.Migrations
                         column: x => x.user_id,
                         principalTable: "users",
                         principalColumn: "id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "cart_items",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    cart_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    book_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    quantity = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_cart_items", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_cart_items_books_book_id",
+                        column: x => x.book_id,
+                        principalTable: "books",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_cart_items_carts_cart_id",
+                        column: x => x.cart_id,
+                        principalTable: "carts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -367,6 +449,11 @@ namespace DataLayer.Migrations
                 column: "publisher_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_borrow_records_BorrowOrderId",
+                table: "borrow_records",
+                column: "BorrowOrderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_borrow_records_copy_id",
                 table: "borrow_records",
                 column: "copy_id");
@@ -374,6 +461,26 @@ namespace DataLayer.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_borrow_records_user_id",
                 table: "borrow_records",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BorrowOrder_UserId",
+                table: "BorrowOrder",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_cart_items_book_id",
+                table: "cart_items",
+                column: "book_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_cart_items_cart_id",
+                table: "cart_items",
+                column: "cart_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_carts_user_id",
+                table: "carts",
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
@@ -404,22 +511,28 @@ namespace DataLayer.Migrations
                 name: "borrow_records");
 
             migrationBuilder.DropTable(
+                name: "cart_items");
+
+            migrationBuilder.DropTable(
                 name: "events");
 
             migrationBuilder.DropTable(
                 name: "RevokedTokens");
 
             migrationBuilder.DropTable(
+                name: "BorrowOrder");
+
+            migrationBuilder.DropTable(
                 name: "book_copies");
 
             migrationBuilder.DropTable(
-                name: "users");
+                name: "carts");
 
             migrationBuilder.DropTable(
                 name: "books");
 
             migrationBuilder.DropTable(
-                name: "roles");
+                name: "users");
 
             migrationBuilder.DropTable(
                 name: "authors");
@@ -429,6 +542,9 @@ namespace DataLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "publishers");
+
+            migrationBuilder.DropTable(
+                name: "roles");
         }
     }
 }

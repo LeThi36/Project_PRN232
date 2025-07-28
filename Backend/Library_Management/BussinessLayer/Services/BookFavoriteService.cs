@@ -22,21 +22,29 @@ namespace BussinessLayer.Services
             _mapper = mapper;
         }
 
-        public async Task<BookFavoriteDto> AddFavoriteAsync(BookFavoriteCreateDto dto)
+        public async Task<BookFavoriteDto> AddFavoriteAsync(string bookId, string userId)
         {
+            // Check existence using userId and bookId, which are trusted from the server context
             var exists = await _context.BookFavorites
-                .AnyAsync(f => f.BookId == dto.BookId && f.UserId == dto.UserId);
+                .AnyAsync(f => f.BookId == bookId && f.UserId == userId);
 
             if (exists)
                 throw new InvalidOperationException("Book is already in favorites.");
 
-            var entity = _mapper.Map<BookFavorite>(dto);
+            // Create the entity directly with the provided trusted IDs
+            var entity = new BookFavorite
+            {
+                BookId = bookId,
+                UserId = userId,
+                // Assuming CreatedAt, UpdatedAt are handled by EF Core or a base entity
+            };
             await _context.BookFavorites.AddAsync(entity);
             await _context.SaveChangesAsync();
 
+            // Retrieve the result, including related Book data
             var result = await _context.BookFavorites
                 .Include(f => f.Book)
-                .FirstAsync(f => f.BookId == dto.BookId && f.UserId == dto.UserId);
+                .FirstAsync(f => f.BookId == bookId && f.UserId == userId);
 
             return _mapper.Map<BookFavoriteDto>(result);
         }

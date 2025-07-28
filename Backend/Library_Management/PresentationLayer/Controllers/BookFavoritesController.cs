@@ -2,6 +2,7 @@
 using BussinessLayer.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace PresentationLayer.Controllers
 {
@@ -21,12 +22,29 @@ namespace PresentationLayer.Controllers
         {
             try
             {
-                var result = await _service.AddFavoriteAsync(dto);
+                // IMPORTANT: Get UserId from the authenticated user's claims
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (string.IsNullOrEmpty(userId))
+                {
+                    // This scenario should ideally not happen if [Authorize] is working,
+                    // but it's good for defensive programming.
+                    return Unauthorized(new { message = "User not authenticated or UserId claim missing." });
+                }
+
+                // Call the service with BookId from DTO and UserId from claims
+                var result = await _service.AddFavoriteAsync(dto.BookId, userId);
                 return Ok(result);
             }
             catch (InvalidOperationException ex)
             {
                 return Conflict(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception for debugging
+                // _logger.LogError(ex, "Error adding book to favorites.");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred while adding to favorites." });
             }
         }
 
