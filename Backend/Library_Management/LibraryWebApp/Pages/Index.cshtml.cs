@@ -6,6 +6,7 @@ using System.Net.Http.Json;
 using LibraryWebApp.Handlers;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryWebApp.Pages
 {
@@ -102,6 +103,70 @@ namespace LibraryWebApp.Pages
             return items;
         }
 
+        public async Task<IActionResult> OnPostAddToCartAsync(string bookId)
+        {
+            var studentCode = Request.Cookies["StudentCode"];
+            var token = Request.Cookies["AccessToken"];
+
+            if (string.IsNullOrEmpty(studentCode) || string.IsNullOrEmpty(token))
+            {
+                return RedirectToPage("/Login/Login");
+            }
+
+            try
+            {
+                var client = _httpClientFactory.CreateClient();
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+                var response = await client.PostAsync($"{_apiBaseUrl}/api/Cart/add?studentCode={studentCode}&bookId={bookId}&quantity=1", null);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogWarning("Add to cart failed: {StatusCode}", response.StatusCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding book to cart");
+            }
+
+            return RedirectToPage(); // Reload Index page
+        }
+
+        public async Task<IActionResult> OnPostAddToWishlistAsync(string bookId)
+        {
+            var token = Request.Cookies["AccessToken"];
+            // Redirect to login if no access token.
+            // This is crucial as the API requires authentication.
+            if (string.IsNullOrEmpty(token))
+                return RedirectToPage("/Login/Login");
+
+            var apiBaseUrl = _apiBaseUrl; // Ensure _apiBaseUrl is correctly configured
+            var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            // Create an anonymous object matching the BookFavoriteCreateDto structure
+            var dto = new
+            {
+                BookId = bookId // Only send BookId
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(dto), System.Text.Encoding.UTF8, "application/json");
+            var response = await client.PostAsync($"{apiBaseUrl}/api/BookFavorites", content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                // Handle API errors, e.g., log them or display a message to the user
+                _logger.LogWarning("Add to wishlist failed: {StatusCode}. Response: {ResponseBody}", response.StatusCode, await response.Content.ReadAsStringAsync());
+                TempData["ErrorMessage"] = "Đã thêm sách vào yêu thích <3";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Thêm sách vào yêu thích thất bại. Vui lòng thử lại.";
+            }
+
+                return RedirectToPage(); // reload the current page
+        }
         public class ODataResponse<T>
         {
             public List<T> Value { get; set; } = new();
