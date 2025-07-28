@@ -1,4 +1,4 @@
-﻿using BussinessLayer.DTOs.BookFavorite;
+﻿    using BussinessLayer.DTOs.BookFavorite;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Net.Http.Headers;
@@ -11,6 +11,8 @@ namespace LibraryWebApp.Pages.Wishlist
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
         public List<BookFavoriteDto> WishlistItems { get; set; } = new();
+        [TempData]
+        public string? Message { get; set; }
 
         public IndexModel(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
@@ -57,6 +59,15 @@ namespace LibraryWebApp.Pages.Wishlist
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             var response = await client.PostAsync($"{apiBaseUrl}/api/Cart/add?studentCode={studentCode}&bookId={bookId}&quantity=1", null);
+            if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessMessage"] = "Sách đã được thêm vào giỏ hàng.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Không thể thêm sách vào giỏ hàng. Hết Sách.";
+            }
+
             return RedirectToPage();
         }
         public async Task<IActionResult> OnPostRemoveAsync(string bookId)

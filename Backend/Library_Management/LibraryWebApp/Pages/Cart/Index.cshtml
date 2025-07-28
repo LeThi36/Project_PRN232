@@ -7,10 +7,10 @@
 <!-- Breadcumb Section Start -->
 <div class="breadcrumb-wrapper">
     <div class="book1">
-        <img src="assets/img/hero/book1.png" alt="book">
+        <img src="~/img/hero/book1.png" alt="book">
     </div>
     <div class="book2">
-        <img src="assets/img/hero/book2.png" alt="book">
+        <img src="~/img/hero/book2.png" alt="book">
     </div>
     <div class="container">
         <div class="page-heading">
@@ -39,6 +39,7 @@
                                 <tr>
                                     <th>Product</th>
                                     <th>Quantity</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -64,6 +65,11 @@
                                                     <button class="qtyplus" aria-hidden="true">+</button>
                                                 </span>
                                             </span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-danger delete-item" data-book-id="@item.BookId">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
                                         </td>
                                     </tr>
                                 }
@@ -95,59 +101,193 @@
                                         <div class="book-list">
                                             <strong>Book Titles:</strong>
                                             <ul id="cartBookList">
-                                                @* Ban đầu show bằng Razor, sau sẽ bị JS thay thế *@
                                                 @foreach (var item in Model.CartItems)
                                                 {
-                                                    <li>@item.BookTitle     X    @item.Quantity</li>
+                                                    <li>@item.BookTitle ( X @item.Quantity)</li>
                                                 }
                                             </ul>
-
                                         </div>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <a href="checkout.html" class="theme-btn">Proceed to checkout</a>
+                        <button type="button" class="theme-btn w-100 mb-2" id="checkoutBtn">Proceed to checkout</button>
+
+                        <button class="theme-btn w-100 bg-danger text-white" id="clearCartBtn">
+                            <i class="fa fa-trash"></i> Clear All
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<!-- Modal Checkout -->
+<div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Checkout Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5>User Information</h5>
+                <p><strong>Name:</strong> <span id="userName"></span></p>
+                <p><strong>Phone:</strong> <span id="userPhone"></span></p>
+                <p><strong>Email:</strong> <span id="userEmail"></span></p>
+                <p><strong>Student Code:</strong> <span id="userCode"></span></p>
+
+                <h5>Books to Borrow</h5>
+                <ul id="bookListCheckout"></ul>
+
+                <h5>Dates</h5>
+                <p><strong>Borrow Date:</strong> <span id="borrowDate"></span></p>
+                <p><strong>Due Date:</strong> <span id="dueDate"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmCheckoutBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
+        // ✅ Đưa ra ngoài để mọi nơi đều dùng được
+        function getCookie(name) {
+            let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+            if (match) return match[2];
+            return '';
+        }
+
+        $('#checkoutBtn').click(async function () {
+            const studentCode = getCookie("StudentCode");
+            const token = getCookie("AccessToken");
+
+            // Lấy thông tin người dùng
+            const userRes = await fetch(`https://localhost:7092/api/Users/student/${studentCode}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const user = await userRes.json();
+
+            $('#userName').text(user.username);
+            $('#userPhone').text(user.phoneNumber);
+            $('#userEmail').text(user.email);
+            $('#userCode').text(user.studentCode);
+
+            // Lấy giỏ hàng
+            const cartRes = await fetch(`https://localhost:7092/api/Cart/${studentCode}`);
+            const cart = await cartRes.json();
+
+            $('#bookListCheckout').empty();
+            cart.forEach(item => {
+                $('#bookListCheckout').append(`<li>${item.bookTitle} (x${item.quantity})</li>`);
+            });
+
+            // Ngày mượn và trả
+            const today = new Date();
+            const dueDate = new Date();
+            dueDate.setDate(today.getDate() + 15);
+
+            $('#borrowDate').text(today.toLocaleDateString());
+            $('#dueDate').text(dueDate.toLocaleDateString());
+
+            // Mở modal
+            $('#checkoutModal').modal('show');
+        });
+
+        // Xác nhận checkout
+        $('#confirmCheckoutBtn').click(function () {
+            const studentCode = getCookie("StudentCode");
+
+            $.ajax({
+                url: `https://localhost:7092/api/borroworders/checkout/${studentCode}`,
+                type: 'POST',
+                success: function () {
+                    Swal.fire('Thành công', 'Đã tạo phiếu mượn!', 'success').then(() => {
+                        location.href = "/BorrowOrder/History";
+                    });
+                },
+                error: function (xhr) {
+                    Swal.fire('Lỗi', xhr.responseText, 'error');
+                }
+            });
+        });
+
         $(document).ready(function () {
-            // Xử lý khi nhập trực tiếp vào input
+            const studentCode = getCookie("StudentCode");
+
+            // Cập nhật số lượng
             $('.quantity-input').on('change', function () {
                 const bookId = $(this).data('book-id');
                 const quantity = $(this).val();
-                const studentCode = getCookie("StudentCode");
 
                 $.ajax({
                     url: `https://localhost:7092/api/Cart/update?studentCode=${studentCode}&bookId=${bookId}&quantity=${quantity}`,
                     type: 'PUT',
                     success: function () {
                         refreshCartSummary(studentCode);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Đã cập nhật!',
+                            toast: true,
+                            position: 'top-end',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
                     },
                     error: function () {
-                        alert("Failed to update quantity.");
+                        Swal.fire('Lỗi', 'Không thể cập nhật số lượng', 'error');
                     }
                 });
             });
 
-            // Xử lý nút cộng
-            $('.qtyplus').click(function () {
+            // Tăng số lượng
+            $('.qtyplus').click(async function () {
                 const $input = $(this).siblings('.quantity-input');
+                const bookId = $input.data('book-id');
                 let quantity = parseInt($input.val());
-                if (quantity < 10) {
-                    quantity++;
-                    $input.val(quantity).trigger('change');
+
+                const response = await fetch(`https://localhost:7092/api/Cart/${studentCode}`);
+                const cart = await response.json();
+
+                const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+                const currentBook = cart.find(item => item.bookId === bookId);
+                const currentQuantity = currentBook ? currentBook.quantity : 0;
+
+                const availableRes = await fetch(`https://localhost:7092/api/BookCopies/available/${bookId}`);
+                const availableCopies = await availableRes.json();
+
+                if (availableCopies <= 0) {
+                    Swal.fire('Thông báo', 'Sách này hiện không còn bản sao nào để mượn.', 'info');
+                    return;
                 }
+
+                if (totalQuantity >= 5) {
+                    Swal.fire('Thông báo', 'Tổng số sách không được vượt quá 5 bản!', 'info');
+                    return;
+                }
+
+                if (currentQuantity >= 2) {
+                    Swal.fire('Thông báo', 'Chỉ được mượn tối đa 2 bản mỗi đầu sách!', 'info');
+                    return;
+                }
+
+                if (quantity + 1 > availableCopies) {
+                    Swal.fire('Thông báo', 'Không còn đủ bản sao để mượn thêm!', 'info');
+                    return;
+                }
+
+                quantity++;
+                $input.val(quantity).trigger('change');
             });
 
-            // Xử lý nút trừ
+            // Giảm số lượng
             $('.qtyminus').click(function () {
                 const $input = $(this).siblings('.quantity-input');
                 let quantity = parseInt($input.val());
@@ -157,6 +297,68 @@
                 }
             });
 
+            // Xóa sách
+            $('.delete-item').click(function () {
+                const bookId = $(this).data('book-id');
+
+                $.ajax({
+                    url: `https://localhost:7092/api/Cart/remove?studentCode=${studentCode}&bookId=${bookId}`,
+                    type: 'DELETE',
+                    success: function () {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Đã xóa sách!',
+                            toast: true,
+                            position: 'top-end',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function () {
+                        Swal.fire('Lỗi', 'Không thể xóa sách', 'error');
+                    }
+                });
+            });
+
+            // Xóa toàn bộ
+            $('#clearCartBtn').click(function () {
+                Swal.fire({
+                    title: 'Bạn có chắc?',
+                    text: "Xóa toàn bộ sách trong giỏ hàng?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#aaa',
+                    confirmButtonText: 'Xóa',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: `https://localhost:7092/api/Cart/clear/${studentCode}`,
+                            type: 'DELETE',
+                            success: function () {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Đã xóa toàn bộ!',
+                                    toast: true,
+                                    position: 'top-end',
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            },
+                            error: function () {
+                                Swal.fire('Lỗi', 'Không thể xóa toàn bộ giỏ hàng', 'error');
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Cập nhật số lượng tổng & danh sách sách
             function refreshCartSummary(studentCode) {
                 $.get(`https://localhost:7092/api/Cart/${studentCode}`, function (data) {
                     let totalQuantity = 0;
@@ -165,18 +367,11 @@
                         totalQuantity += item.quantity;
                         html += `<li>${item.bookTitle} (x${item.quantity})</li>`;
                     });
-
                     $('#totalQuantity').text(totalQuantity);
                     $('#cartBookList').html(html);
                 });
             }
-
-
-            function getCookie(name) {
-                let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-                if (match) return match[2];
-                return '';
-            }
         });
     </script>
 }
+

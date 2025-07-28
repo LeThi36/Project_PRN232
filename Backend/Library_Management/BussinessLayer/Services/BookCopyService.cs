@@ -62,9 +62,14 @@ namespace BussinessLayer.Services
         {
             return await _copyRepo.GetAllAsync(c => c.BookId == bookId);
         }
+        
+        public async Task<int> GetAvailableCopiesAsync(string bookId)
+        {
+            var copies = await _copyRepo.GetAllAsync(c => c.BookId == bookId && c.Status == "Available");
+            return copies.Count();
+        }
 
-        public async Task<PaginationResult<BookCopyResponseDto>> GetPagedAsync(
-    string bookId, string? search, string? status, int page, int pageSize)
+        public async Task<PaginationResult<BookCopyResponseDto>> GetPagedAsync(string bookId, string? search, string? status, int page, int pageSize)
         {
             var query = _context.BookCopies
                 .Where(c => c.BookId == bookId);
@@ -93,6 +98,5 @@ namespace BussinessLayer.Services
 
             return new PaginationResult<BookCopyResponseDto>(items, total, page, pageSize);
         }
-
     }
 }

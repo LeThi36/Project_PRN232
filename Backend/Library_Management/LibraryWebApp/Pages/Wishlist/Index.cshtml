@@ -4,7 +4,6 @@
     ViewData["Title"] = "Wishlist";
 }
 
-<!-- Breadcumb Section Start -->
 <div class="breadcrumb-wrapper">
     <div class="book1">
         <img src="~/img/hero/book1.png" alt="book">
@@ -15,14 +14,36 @@
     <div class="container">
         <div class="page-heading">
             <h1>Wishlist</h1>
+
+            @* @if (!string.IsNullOrEmpty(Model.Message) || TempData["ErrorMessage"] != null)
+            {
+            <div class="card border-@((TempData["ErrorMessage"] != null) ? "danger" : "success") mb-3 mt-3">
+            <div class="card-header bg-@((TempData["ErrorMessage"] != null) ? "danger" : "success") text-white">
+            <strong>
+            <i class="fa-solid fa-circle-info me-1"></i>
+            @((TempData["ErrorMessage"] != null) ? "Error" : "Information")
+            </strong>
+            <button type="button" class="btn-close btn-close-white float-end" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div class="card-body">
+            <p class="card-text">
+            @if (TempData["ErrorMessage"] != null)
+            {
+            @TempData["ErrorMessage"]
+            }
+            else
+            {
+            @Model.Message
+            }
+            </p>
+            </div>
+            </div>
+            } *@
+
             <div class="page-header">
                 <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
-                    <li>
-                        <a asp-page="/Index">Home</a>
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </li>
+                    <li><a asp-page="/Index">Home</a></li>
+                    <li><i class="fa-solid fa-chevron-right"></i></li>
                     <li>Wishlist</li>
                 </ul>
             </div>
@@ -30,7 +51,6 @@
     </div>
 </div>
 
-<!-- Wishlist Table -->
 <div class="cart-section section-padding">
     <div class="container">
         <div class="main-cart-wrapper">
@@ -56,22 +76,16 @@
                                                 <span class="fw-bold">@item.BookTitle</span>
                                             </div>
                                         </td>
-                                        <td>
-                                            <span>@item.AuthorName</span>
-                                        </td>
-                                        <td>
-                                            <span>@item.AddedAt?.ToString("dd/MM/yyyy")</span>
-                                        </td>
+                                        <td>@item.AuthorName</td>
+                                        <td>@item.AddedAt?.ToString("dd/MM/yyyy")</td>
                                         <td>
                                             <div class="d-flex gap-2 align-items-center">
-                                                <!-- Remove -->
                                                 <form method="post" asp-page-handler="Remove" asp-route-bookId="@item.BookId" onsubmit="return confirm('Remove this book from wishlist?');">
                                                     <button type="submit" class="btn btn-outline-danger btn-sm" title="Remove from wishlist">
                                                         <i class="fa fa-trash"></i>
                                                     </button>
                                                 </form>
 
-                                                <!-- Add to cart -->
                                                 <form method="post" asp-page-handler="AddToCart" asp-route-bookId="@item.BookId">
                                                     <button type="submit" class="btn btn-outline-success btn-sm" title="Add to cart">
                                                         <i class="fa fa-cart-plus"></i>
@@ -83,6 +97,7 @@
                                 }
                             </tbody>
                         </table>
+
                         @if (!Model.WishlistItems.Any())
                         {
                             <div class="text-center mt-4">
@@ -95,3 +110,38 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Cấu hình Toastr (tùy chỉnh theo ý bạn)
+            toastr.options = {
+                "closeButton": true, // Cho phép nút đóng
+                "debug": false,
+                "newestOnTop": true, // Thông báo mới nhất hiện trên cùng
+                "progressBar": true, // Thanh tiến trình
+                "positionClass": "toast-top-right", // Vị trí hiển thị (có thể là toast-top-left, toast-bottom-right, v.v.)
+                "preventDuplicates": false, // Cho phép hiển thị nhiều thông báo giống nhau
+                "onclick": null,
+                "showDuration": "300", // Thời gian hiển thị ban đầu
+                "hideDuration": "1000", // Thời gian ẩn đi
+                "timeOut": "5000", // Thời gian tồn tại trước khi tự động ẩn (5 giây)
+                "extendedTimeOut": "1000", // Thời gian tồn tại thêm khi hover
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn", // Hiệu ứng xuất hiện
+                "hideMethod": "fadeOut" // Hiệu ứng biến mất
+            };
+
+            // Kiểm tra TempData và hiển thị thông báo Toastr
+            var successMessage = '@Html.Raw(TempData["SuccessMessage"])'; // Dùng Html.Raw để tránh escape HTML nếu thông báo có ký tự đặc biệt
+            var errorMessage = '@Html.Raw(TempData["ErrorMessage"])';
+
+            if (successMessage && successMessage.trim() !== '') {
+                toastr.success(successMessage);
+            } else if (errorMessage && errorMessage.trim() !== '') {
+                toastr.error(errorMessage);
+            }
+        });
+    </script>
+}

@@ -39,6 +39,17 @@ namespace BussinessLayer.Services
             var user = await _context.Users.FirstOrDefaultAsync(u => u.StudentCode == studentCode);
             if (user == null) return false;
 
+            // Kiểm tra có bản sao nào khả dụng không
+            var availableCopies = await _context.BookCopies
+                .Where(bc => bc.BookId == bookId && bc.Status == "Available")
+                .CountAsync();
+
+            if (availableCopies < quantity)
+            {
+                // Không có bản sao nào khả dụng để mượn
+                return false;
+            }
+
             var cart = await _context.Carts.FirstOrDefaultAsync(c => c.UserId == user.Id);
             if (cart == null)
             {
@@ -78,6 +89,7 @@ namespace BussinessLayer.Services
             await _context.SaveChangesAsync();
             return true;
         }
+
 
         public async Task<bool> RemoveFromCartAsync(string studentCode, string bookId)
         {

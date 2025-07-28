@@ -18,6 +18,24 @@ namespace PresentationLayer.Controllers
             _userService = userService;
         }
 
+        [HttpGet("student/{studentCode}")]
+        public async Task<IActionResult> GetUserByStudentCode(string studentCode)
+        {
+            var user = await _userService.GetUserByStudentCodeAsync(studentCode);
+            if (user == null) return NotFound();
+
+            var userDto = new
+            {
+                user.Id,
+                user.Username,
+                user.StudentCode,
+                user.Email,
+                user.PhoneNumber
+                // KHÔNG trả Role hay các collection
+            };
+
+            return Ok(userDto);
+        }
         // GET: api/Users/students
         [HttpGet("students")]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetStudents()
@@ -76,5 +94,6 @@ namespace PresentationLayer.Controllers
             var result = await _userService.ToggleBanStatusAsync(id, false);
             return result ? NoContent() : NotFound();
         }
+
     }
 }
