@@ -8,7 +8,7 @@ namespace BussinessLayer.DTOs.Category
 {
     public class CategoryDto
     {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
+        public Guid Id { get; set; }
+        public string CategoryName { get; set; } = string.Empty;
     }
 }

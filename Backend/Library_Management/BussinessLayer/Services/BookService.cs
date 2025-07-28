@@ -59,7 +59,7 @@ namespace BussinessLayer.Services
                     (string.IsNullOrEmpty(request.CategoryId) || b.CategoryId == request.CategoryId) &&
                     (string.IsNullOrEmpty(request.AuthorId) || b.AuthorId == request.AuthorId) &&
                     (string.IsNullOrEmpty(request.PublisherId) || b.PublisherId == request.PublisherId) &&
-                    (!request.IncludeDeleted ? b.DeletedAt == null : true); // Lọc sách chưa xóa mềm nếu không yêu cầu
+                    (!request.IncludeDeleted ? b.DeletedAt == null : true); // Lọc sách chưa xóa mềm
             }
 
 
@@ -224,12 +224,18 @@ namespace BussinessLayer.Services
 
         public async Task<bool> DeleteBookAsync(string id)
         {
-            var bookToDelete = await _bookRepository.GetAsync(b => b.Id == id && b.DeletedAt == null);
+            var bookToDelete = await _bookRepository.GetAsync(b => b.Id == id);
             if (bookToDelete == null)
             {
+                Console.WriteLine($"❌ Book ID {id} not found.");
                 return false; // Không tìm thấy sách hoặc đã bị xóa
             }
 
+            if (bookToDelete.DeletedAt != null)
+            {
+                Console.WriteLine($" Book ID {id} founded.");
+                return true; // Đã xóa rồi thì coi như thành công luôn
+            }
             // Thực hiện soft delete
             bookToDelete.DeletedAt = DateTime.Now;
             bookToDelete.UpdatedAt = DateTime.Now;

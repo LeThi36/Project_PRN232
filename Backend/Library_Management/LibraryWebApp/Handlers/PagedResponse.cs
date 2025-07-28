@@ -1,0 +1,17 @@
+﻿namespace LibraryWebApp.Handlers
+{
+    public class PagedResponse<T>
+    {
+        public List<T> Data { get; set; } = new();
+
+        public int TotalCount { get; set; }
+        public int PageSize { get; set; }
+        public int PageNumber { get; set; }
+
+        //Auto
+        public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
+        public bool HasPreviousPage { get; set; }
+        public bool HasNextPage { get; set; }
+    }
+
+}
