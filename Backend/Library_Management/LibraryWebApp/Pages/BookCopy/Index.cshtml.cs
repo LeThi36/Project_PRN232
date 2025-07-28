@@ -28,7 +28,7 @@ namespace LibraryWebApp.Pages.BookCopy
         [BindProperty(SupportsGet = true)]
         public string FilterStatus { get; set; }
 
-        [BindProperty(SupportsGet = true, Name = "page")]
+        [BindProperty(SupportsGet = true, Name = "pageIndex")]
         public int Page { get; set; } = 1;
 
         public int TotalPages { get; set; }
@@ -69,6 +69,7 @@ namespace LibraryWebApp.Pages.BookCopy
             BookTitle = bookResponse?.Title ?? "(Unknown Book)";
 
             return Page();
+
         }
 
         public async Task<IActionResult> OnPostEditAsync(string Id, string Status, string BookId)
@@ -99,7 +100,7 @@ namespace LibraryWebApp.Pages.BookCopy
                 TempData["StatusMessage"] = $"Update error: {ex.Message}";
             }
 
-            return RedirectToPage("/BookCopy/Index", new { bookId = BookId, page = Page, searchId = SearchId, filterStatus = FilterStatus });
+            return RedirectToPage("/BookCopy/Index", new { bookId = BookId, pageIndex = Page, searchId = SearchId, filterStatus = FilterStatus });
 
 
         }
@@ -128,11 +129,9 @@ namespace LibraryWebApp.Pages.BookCopy
             }
             catch (Exception ex)
             {
-                TempData["StatusMessage"] = $"Delete error: {ex.Message}";
+                TempData["StatusMessage"] = $"This book cannot be deleted";
             }
-
-            return RedirectToPage("/BookCopy/Index", new { bookId = BookId, page = Page, searchId = SearchId, filterStatus = FilterStatus });
-
+            return RedirectToPage("/BookCopy/Index", new { bookId = BookId, pageIndex = Page, searchId = SearchId, filterStatus = FilterStatus });
 
         }
 
@@ -172,8 +171,7 @@ namespace LibraryWebApp.Pages.BookCopy
                 TempData["StatusMessage"] = $"Error: {ex.Message}";
             }
 
-            return RedirectToPage("/BookCopy/Index", new { bookId = BookId, page = Page, searchId = SearchId, filterStatus = FilterStatus });
-
+            return RedirectToPage("/BookCopy/Index", new { bookId = BookId, pageIndex = Page, searchId = SearchId, filterStatus = FilterStatus });
 
         }
     }

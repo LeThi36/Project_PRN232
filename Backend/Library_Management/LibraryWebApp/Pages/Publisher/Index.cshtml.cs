@@ -15,17 +15,29 @@ namespace LibraryWebApp.Pages.Publisher
         }
 
         [BindProperty]
-        public PublisherCreateDto Publisher { get; set; }
+        public PublisherCreateDto NewPublisher { get; set; } = new();
+
 
         public List<PublisherResponseDto> Publishers { get; set; }
 
         [TempData]
-        public string StatusMessage { get; set; } // hiển thị thông báo
+        public string StatusMessage { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string Search { get; set; }
+
+        [BindProperty(SupportsGet = true, Name = "pageIndex")]
+        public int Page { get; set; } = 1;
+
+        public int TotalPages { get; set; }
+
+        public int PageSize { get; set; } = 5;
 
         public async Task OnGetAsync()
         {
-            var result = await _publisherService.GetAllPublisher();
-            Publishers = result.Select(p => new PublisherResponseDto
+            var result = await _publisherService.GetPagedPublishersAsync(Search, Page, PageSize);
+
+            Publishers = result.Data.Select(p => new PublisherResponseDto
             {
                 Id = p.Id,
                 PublisherName = p.PublisherName,
@@ -34,56 +46,80 @@ namespace LibraryWebApp.Pages.Publisher
                 CreatedAt = p.CreatedAt,
                 UpdatedAt = p.UpdatedAt
             }).ToList();
+
+            TotalPages = (int)Math.Ceiling(result.TotalCount / (double)PageSize);
         }
 
         public async Task<IActionResult> OnPostCreateAsync()
         {
+            ModelState.Remove(nameof(Search));
+
             if (!ModelState.IsValid)
             {
-                StatusMessage = "Invalid data.";
-                return RedirectToPage();
+                var errors = ModelState.Values.SelectMany(v => v.Errors)
+                                              .Select(e => e.ErrorMessage)
+                                              .ToList();
+
+                TempData["StatusMessage"] = "Invalid data: " + string.Join(" | ", errors);
+                TempData["ShowCreateModal"] = "true";
+                await OnGetAsync();
+                return Page();
             }
 
             try
             {
-                await _publisherService.AddPublisher(Publisher);
-                StatusMessage = "Publisher created successfully.";
+                await _publisherService.AddPublisher(NewPublisher);
+                TempData["StatusMessage"] = "Publisher created successfully.";
+                return RedirectToPage(new { search = Search, pageIndex = Page });
             }
             catch (Exception ex)
             {
-                StatusMessage = $"Failed to create publisher: {ex.Message}";
+                TempData["StatusMessage"] = $"Failed to create publisher: {ex.Message}";
+                TempData["ShowCreateModal"] = "true";
+                await OnGetAsync();
+                return Page();
             }
-
-            return RedirectToPage();
         }
 
-        public async Task<IActionResult> OnPostEditAsync([FromForm] PublisherResponseDto publisher)
+
+        public async Task<IActionResult> OnPostEditAsync()
         {
-            if (!ModelState.IsValid || publisher == null || string.IsNullOrEmpty(publisher.Id))
+            var form = Request.Form;
+
+            // Lấy dữ liệu thủ công
+            string id = form["Publisher.Id"];
+            string name = form["Publisher.PublisherName"];
+            string address = form["Publisher.Address"];
+            string phone = form["Publisher.PhoneNumber"];
+
+            if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(name))
             {
                 StatusMessage = "Invalid publisher data.";
-                return RedirectToPage();
+                await OnGetAsync();
+                return Page();
             }
 
             try
             {
                 var updateDto = new PublisherUpdateDto
                 {
-                    PublisherName = publisher.PublisherName,
-                    Address = publisher.Address,
-                    PhoneNumber = publisher.PhoneNumber
+                    PublisherName = name,
+                    Address = address,
+                    PhoneNumber = phone
                 };
 
-                await _publisherService.UpdatePublisher(publisher.Id, updateDto);
+                await _publisherService.UpdatePublisher(id, updateDto);
                 StatusMessage = "Publisher updated successfully.";
+                return RedirectToPage(new { search = Search, pageIndex = Page });
             }
             catch (Exception ex)
             {
                 StatusMessage = $"Failed to update publisher: {ex.Message}";
+                await OnGetAsync();
+                return Page();
             }
-
-            return RedirectToPage();
         }
+
 
 
         public async Task<IActionResult> OnPostDeleteAsync(string id)
@@ -91,7 +127,7 @@ namespace LibraryWebApp.Pages.Publisher
             if (string.IsNullOrEmpty(id))
             {
                 StatusMessage = "Publisher ID is required.";
-                return RedirectToPage();
+                return RedirectToPage(new { search = Search, pageIndex = Page });
             }
 
             try
@@ -101,11 +137,12 @@ namespace LibraryWebApp.Pages.Publisher
             }
             catch (Exception ex)
             {
-                StatusMessage = $"Failed to delete publisher: {ex.Message}";
+                StatusMessage = $"This publisher cannot be deleted.";
             }
 
-            return RedirectToPage();
+            return RedirectToPage(new { search = Search, pageIndex = Page });
         }
+
 
     }
 }

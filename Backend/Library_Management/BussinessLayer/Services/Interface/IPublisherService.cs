@@ -15,5 +15,9 @@ namespace BussinessLayer.Services.Interface
         Task<Publisher> GetPublisherById(string id);
         Task UpdatePublisher(string id, PublisherUpdateDto publisherDto);
         Task RemovePublisher(string id);
+
+        Task<(IEnumerable<Publisher> Data, int TotalCount, int PageIndex, int PageSize)>
+    GetPagedPublishersAsync(string? search, int pageIndex, int pageSize);
+
     }
 }

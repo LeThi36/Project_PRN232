@@ -5,7 +5,6 @@
 }
 
 <div class="container mt-5">
-    <p>DEBUG: Current Page = @Model.Page</p>
     <a href="/Book/Index" class="btn btn-secondary mb-3">← Back to Book List</a>
     <h2 class="mb-4">📚 Copies of: <strong>@Model.BookTitle</strong></h2>
     @if (!string.IsNullOrEmpty(TempData["StatusMessage"]?.ToString()))
@@ -23,7 +22,7 @@
     </div>
 
     <form method="get" class="row g-3 mb-4">
-        <input type="hidden" name="BookId" value="@Model.BookId" />
+        <input type="hidden" name="bookId" value="@Model.BookId" />
 
         <div class="col-md-3">
             <input type="text" name="SearchId" class="form-control" placeholder="Search by Copy ID" value="@Model.SearchId" />
@@ -66,7 +65,8 @@
 
         <div class="col-md-3">
             <button type="submit" class="btn btn-primary">Apply Filters</button>
-            <a href="/BookCopy/Index?BookId=@Model.BookId" class="btn btn-secondary">Reset</a>
+            <a href="/BookCopy/Index?bookId=@Model.BookId" class="btn btn-secondary">Reset</a>
+
         </div>
     </form>
 
@@ -95,7 +95,7 @@
                             <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal-@copy.Id">Edit</button>
                             <form asp-page-handler="Delete" method="post" class="d-inline">
                                 <input type="hidden" name="Id" value="@copy.Id" />
-                                <input type="hidden" name="BookId" value="@Model.BookId" />
+                                <input type="hidden" name="bookId" value="@Model.BookId" />
                                 <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure to delete this copy?')">Delete</button>
                             </form>
                         </td>
@@ -112,7 +112,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <input type="hidden" name="Id" value="@copy.Id" />
-                                        <input type="hidden" name="BookId" value="@Model.BookId" />
+                                        <input type="hidden" name="bookId" value="@Model.BookId" />
                                         <div class="mb-3">
                                             <label class="form-label">Status</label>
                                             <select name="Status" class="form-select" required>
@@ -172,15 +172,61 @@
     {
         <nav>
             <ul class="pagination justify-content-center">
-                @for (int i = 1; i <= Model.TotalPages; i++)
-                {
-                    <li class="page-item @(Model.Page == i ? "active" : "")">
-                        <a class="page-link"
-                           href="?bookId=@Model.BookId&searchId=@Model.SearchId&filterStatus=@Model.FilterStatus&page=@i">@i</a>
+                @{
+                    int startPage = Math.Max(1, Model.Page - 2);
 
-
-                    </li>
+                    int endPage = Math.Min(Model.TotalPages, Model.Page + 2);
                 }
+
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        @* First *@
+                        @if (Model.Page > 3)
+
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="?bookId=@Model.BookId&searchId=@Model.SearchId&filterStatus=@Model.FilterStatus&pageIndex=1">« First</a>
+                            </li>
+                        }
+
+                        @* Previous *@
+                        @if (Model.Page > 1)
+
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="?bookId=@Model.BookId&searchId=@Model.SearchId&filterStatus=@Model.FilterStatus&pageIndex=@(Model.Page - 1)">‹ Prev</a>
+                            </li>
+                        }
+
+                        @* Page Numbers *@
+                        @for (int i = startPage; i <= endPage; i++)
+
+                        {
+                            <li class="page-item @(Model.Page == i ? "active" : "")">
+                                <a class="page-link" href="?bookId=@Model.BookId&searchId=@Model.SearchId&filterStatus=@Model.FilterStatus&pageIndex=@i">@i</a>
+                            </li>
+                        }
+
+                        @* Next *@
+                        @if (Model.Page < Model.TotalPages)
+
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="?bookId=@Model.BookId&searchId=@Model.SearchId&filterStatus=@Model.FilterStatus&pageIndex=@(Model.Page + 1)">Next ›</a>
+                            </li>
+                        }
+
+                        @* Last *@
+                        @if (Model.Page < Model.TotalPages - 2)
+
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="?bookId=@Model.BookId&searchId=@Model.SearchId&filterStatus=@Model.FilterStatus&pageIndex=@Model.TotalPages">Last »</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+
             </ul>
         </nav>
     }
@@ -195,7 +241,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <input type="hidden" name="BookId" value="@Model.BookId" />
+                        <input type="hidden" name="bookId" value="@Model.BookId" />
 
                         <div class="mb-3">
                             <label class="form-label">Number of Copies</label>

@@ -73,7 +73,6 @@ namespace PresentationLayer.Controllers
             var available = await _service.GetAvailableCopiesAsync(bookId);
             return Ok(available);
         }
-    }
 
         [HttpGet("paged")]
         public async Task<IActionResult> GetPaged(
