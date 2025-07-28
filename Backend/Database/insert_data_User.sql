@@ -17,7 +17,7 @@ VALUES (
     '1990-01-15',                            -- date_of_birth (YYYY-MM-DD)
     0,                                       -- gender (0: Male, 1: Female)
     N'123 Đường Điện Biên Phủ, Quận 1, TP.HCM',      -- address (N' để hỗ trợ Unicode)
-    '2B41A33D-A688-43ED-AC93-07913C185E5D',  -- Thay thế bằng ID thực tế của vai trò Admin
+    '405270AC-78B3-435A-ADFB-F341E6136658',  -- Thay thế bằng ID thực tế của vai trò Admin
     NULL,                                    -- image_url
     GETDATE(),                               -- CreatedAt
     GETDATE(),                               -- UpdatedAt
@@ -40,7 +40,7 @@ VALUES (
     '1985-05-20',
     1,                                       -- gender (1: Female)
     N'456 Đường Hai Bà Trưng, Quận Hoàn Kiếm, Hà Nội',
-    '77A57779-9FC1-4BC4-94E5-9257DEB63E87',  -- Thay thế bằng ID thực tế của vai trò Librarian
+    'F229D7A1-4AA0-43AC-BC60-2149A032D3BC',  -- Thay thế bằng ID thực tế của vai trò Librarian
     NULL,
     GETDATE(),
     GETDATE(),
@@ -63,7 +63,7 @@ VALUES (
     '2000-10-10',
     0,                                       -- gender (0: Male)
     N'789 Đường Nguyễn Văn Linh, Quận 3, Đà Nẵng',
-    '79FC15D5-846E-48DE-B6E1-4E3A7BF0CA6E',  -- Thay thế bằng ID thực tế của vai trò Student
+    '3F22819D-CDF0-4081-A4C8-023E312CB9EE',  -- Thay thế bằng ID thực tế của vai trò Student
     NULL,
     GETDATE(),
     GETDATE(),
