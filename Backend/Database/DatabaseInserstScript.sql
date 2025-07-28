@@ -63,45 +63,45 @@ DECLARE @user19Id UNIQUEIDENTIFIER = NEWID();
 DECLARE @user20Id UNIQUEIDENTIFIER = NEWID();
 
 INSERT INTO Users (Id, Username, password_hash, Email, Phone_Number, Date_Of_Birth, Gender, Address, role_id, Image_Url, CreatedAt, UpdatedAt, DeletedAt, StudentCode) VALUES
-(@user1Id, 'adminuser', '123123', 'admin@example.com', '0912345678', '1980-01-01', 0, '123 Admin St, City A', @adminrole_id, NULL, '2022-01-15 09:23:53.123', '2024-03-10 14:45:00.567', NULL, 'admin'),
+(@user1Id, 'adminuser', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'admin@example.com', '0912345678', '1980-01-01', 0, '123 Admin St, City A', @adminrole_id, NULL, '2022-01-15 09:23:53.123', '2024-03-10 14:45:00.567', NULL, 'admin'),
 
-(@user2Id, 'librarianuser', '123123', 'lib@example.com', '0912345679', '1985-02-15', 1, '456 Library Rd, City B', @librarianrole_id, NULL,  '2021-05-20 11:00:00.000', '2023-11-25 08:30:15.987', NULL, 'librarian'),
+(@user2Id, 'librarianuser', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'lib@example.com', '0912345679', '1985-02-15', 1, '456 Library Rd, City B', @librarianrole_id, NULL,  '2021-05-20 11:00:00.000', '2023-11-25 08:30:15.987', NULL, 'librarian'),
 
-(@user3Id, 'student1', '123123', 'stu1@example.com', '0912345680', '2000-03-20', 0, '789 Student Apt, City C', @studentrole_id, NULL, '2020-08-01 15:10:20.400', '2022-02-05 16:05:30.120', NULL, 'ST001'),
+(@user3Id, 'student1', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'stu1@example.com', '0912345680', '2000-03-20', 0, '789 Student Apt, City C', @studentrole_id, NULL, '2020-08-01 15:10:20.400', '2022-02-05 16:05:30.120', NULL, 'ST001'),
 
-(@user4Id, 'student2', '123123', 'stu2@example.com', '0912345681', '2001-04-25', 1, '101 Student Dorm, City C', @studentrole_id, NULL, '2023-02-10 07:00:00.000', '2024-09-12 20:10:05.000', NULL, 'ST002'),
+(@user4Id, 'student2', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'stu2@example.com', '0912345681', '2001-04-25', 1, '101 Student Dorm, City C', @studentrole_id, NULL, '2023-02-10 07:00:00.000', '2024-09-12 20:10:05.000', NULL, 'ST002'),
 
-(@user5Id, 'student3', '123123', 'stu3@example.com', '0912345682', '1999-05-30', 0, '202 University Blvd, City C', @studentrole_id, NULL, '2022-07-07 10:30:45.000', '2025-01-01 00:00:00.000', NULL, 'ST003'),
+(@user5Id, 'student3', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'stu3@example.com', '0912345682', '1999-05-30', 0, '202 University Blvd, City C', @studentrole_id, NULL, '2022-07-07 10:30:45.000', '2025-01-01 00:00:00.000', NULL, 'ST003'),
 
-(@user6Id, 'john.doe', '123123', 'john.doe@example.com', '0912345683', '1998-06-01', 0, '303 Oak St, Town D', @studentrole_id, NULL, '2021-03-03 18:20:10.000', '2023-06-15 09:00:00.000', NULL, 'ST004'),
+(@user6Id, 'john.doe', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'john.doe@example.com', '0912345683', '1998-06-01', 0, '303 Oak St, Town D', @studentrole_id, NULL, '2021-03-03 18:20:10.000', '2023-06-15 09:00:00.000', NULL, 'ST004'),
 
-(@user7Id, 'jane.smith', '123123', 'jane.smith@example.com', '0912345684', '2002-07-07', 1, '404 Pine St, Town D', @studentrole_id, NULL, '2024-04-10 13:00:00.000', '2025-05-20 11:30:00.000', NULL, 'ST005'),
+(@user7Id, 'jane.smith', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'jane.smith@example.com', '0912345684', '2002-07-07', 1, '404 Pine St, Town D', @studentrole_id, NULL, '2024-04-10 13:00:00.000', '2025-05-20 11:30:00.000', NULL, 'ST005'),
 
-(@user8Id, 'peter.jones', '123123', 'peter.jones@example.com', '0912345685', '1997-08-10', 0, '505 Maple Ave, Town E', @studentrole_id, NULL, '2020-11-20 08:00:00.000', '2021-12-01 10:10:10.000', NULL, 'ST006'),
+(@user8Id, 'peter.jones', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'peter.jones@example.com', '0912345685', '1997-08-10', 0, '505 Maple Ave, Town E', @studentrole_id, NULL, '2020-11-20 08:00:00.000', '2021-12-01 10:10:10.000', NULL, 'ST006'),
 
-(@user9Id, 'alice.brown', '12213', 'alice.brown@example.com', '0912345686', '2003-09-12', 1, '606 Birch Ln, Town E', @studentrole_id, NULL, '2023-01-01 12:00:00.000', '2024-07-22 17:00:00.000', NULL, 'ST007'),
+(@user9Id, 'alice.brown', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'alice.brown@example.com', '0912345686', '2003-09-12', 1, '606 Birch Ln, Town E', @studentrole_id, NULL, '2023-01-01 12:00:00.000', '2024-07-22 17:00:00.000', NULL, 'ST007'),
 
-(@user10Id, 'bob.white', '123123', 'bob.white@example.com', '0912345687', '1996-10-15', 0, '707 Cedar Dr, Town F', @studentrole_id, NULL, '2022-09-15 09:45:00.000', '2025-06-01 06:00:00.000', NULL, 'ST008'),
+(@user10Id, 'bob.white', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'bob.white@example.com', '0912345687', '1996-10-15', 0, '707 Cedar Dr, Town F', @studentrole_id, NULL, '2022-09-15 09:45:00.000', '2025-06-01 06:00:00.000', NULL, 'ST008'),
 
-(@user11Id, 'charlie.green', '123123', 'charlie.green@example.com', '0912345688', '2004-11-20', 0, '808 Elm Rd, Town F', @studentrole_id, NULL, '2024-02-28 14:00:00.000', '2025-03-05 09:00:00.000', NULL, 'ST009'),
+(@user11Id, 'charlie.green', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'charlie.green@example.com', '0912345688', '2004-11-20', 0, '808 Elm Rd, Town F', @studentrole_id, NULL, '2024-02-28 14:00:00.000', '2025-03-05 09:00:00.000', NULL, 'ST009'),
 
-(@user12Id, 'diana.king', '123123', 'diana.king@example.com', '0912345689', '1995-12-25', 1, '909 Willow Cres, Town G', @studentrole_id, NULL, '2020-03-10 11:00:00.000', '2021-04-20 15:00:00.000', NULL, 'ST010'),
+(@user12Id, 'diana.king', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'diana.king@example.com', '0912345689', '1995-12-25', 1, '909 Willow Cres, Town G', @studentrole_id, NULL, '2020-03-10 11:00:00.000', '2021-04-20 15:00:00.000', NULL, 'ST010'),
 
-(@user13Id, 'eva.lopez', '123123', 'eva.lopez@example.com', '0912345690', '2000-01-05', 1, '111 Poplar Blvd, Town G', @studentrole_id, NULL, '2023-05-01 10:00:00.000', '2024-10-10 19:00:00.000', NULL, 'ST011'),
+(@user13Id, 'eva.lopez', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'eva.lopez@example.com', '0912345690', '2000-01-05', 1, '111 Poplar Blvd, Town G', @studentrole_id, NULL, '2023-05-01 10:00:00.000', '2024-10-10 19:00:00.000', NULL, 'ST011'),
 
-(@user14Id, 'frank.moore', '123123', 'frank.moore@example.com', '0912345691', '1997-02-14', 0, '222 Aspen Pkwy, Town H', @studentrole_id, NULL, '2021-01-20 09:00:00.000', '2022-08-08 11:00:00.000', NULL, 'ST012'),
+(@user14Id, 'frank.moore', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'frank.moore@example.com', '0912345691', '1997-02-14', 0, '222 Aspen Pkwy, Town H', @studentrole_id, NULL, '2021-01-20 09:00:00.000', '2022-08-08 11:00:00.000', NULL, 'ST012'),
 
-(@user15Id, 'grace.hall', '123123', 'grace.hall@example.com', '0912345692', '2001-03-03', 1, '333 Spruce St, Town H', @studentrole_id, NULL, '2024-01-05 16:00:00.000', '2025-04-15 14:00:00.000', NULL, 'ST013'),
+(@user15Id, 'grace.hall', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'grace.hall@example.com', '0912345692', '2001-03-03', 1, '333 Spruce St, Town H', @studentrole_id, NULL, '2024-01-05 16:00:00.000', '2025-04-15 14:00:00.000', NULL, 'ST013'),
 
-(@user16Id, 'harry.clark', '123123', 'harry.clark@example.com', '0912345693', '1994-04-08', 0, '444 Palm Ave, Town I', @studentrole_id, NULL, '2020-07-01 10:00:00.000', '2021-09-30 17:00:00.000', NULL, 'ST014'),
+(@user16Id, 'harry.clark', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'harry.clark@example.com', '0912345693', '1994-04-08', 0, '444 Palm Ave, Town I', @studentrole_id, NULL, '2020-07-01 10:00:00.000', '2021-09-30 17:00:00.000', NULL, 'ST014'),
 
-(@user17Id, 'ivy.davis', '123123', 'ivy.davis@example.com', '0912345694', '2002-05-19', 1, '555 Cherry Ln, Town I', @studentrole_id, NULL, '2023-08-12 11:00:00.000', '2024-11-01 10:00:00.000', NULL, 'ST015'),
+(@user17Id, 'ivy.davis', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'ivy.davis@example.com', '0912345694', '2002-05-19', 1, '555 Cherry Ln, Town I', @studentrole_id, NULL, '2023-08-12 11:00:00.000', '2024-11-01 10:00:00.000', NULL, 'ST015'),
 
-(@user18Id, 'jack.evans', '123123', 'jack.evans@example.com', '0912345695', '1999-06-21', 0, '666 Vine Dr, Town J', @studentrole_id, NULL, '2021-06-20 14:00:00.000', '2023-01-25 12:00:00.000', NULL, 'ST016'),
+(@user18Id, 'jack.evans', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'jack.evans@example.com', '0912345695', '1999-06-21', 0, '666 Vine Dr, Town J', @studentrole_id, NULL, '2021-06-20 14:00:00.000', '2023-01-25 12:00:00.000', NULL, 'ST016'),
 
-(@user19Id, 'kathy.harris', '123123', 'kathy.harris@example.com', '0912345696', '2003-07-30', 1, '777 Peach Blvd, Town J', @studentrole_id, NULL, '2024-06-01 09:00:00.000', '2025-06-20 15:00:00.000', NULL, 'ST017'),
+(@user19Id, 'kathy.harris', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'kathy.harris@example.com', '0912345696', '2003-07-30', 1, '777 Peach Blvd, Town J', @studentrole_id, NULL, '2024-06-01 09:00:00.000', '2025-06-20 15:00:00.000', NULL, 'ST017'),
 
-(@user20Id, 'leo.jackson', '123123', 'leo.jackson@example.com', '0912345697', '1996-08-05', 0, '888 Plum Pkwy, Town K', @studentrole_id, NULL, '2022-04-01 08:00:00.000', '2025-06-25 10:00:00.000', NULL, 'ST018');
+(@user20Id, 'leo.jackson', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'leo.jackson@example.com', '0912345697', '1996-08-05', 0, '888 Plum Pkwy, Town K', @studentrole_id, NULL, '2022-04-01 08:00:00.000', '2025-06-25 10:00:00.000', NULL, 'ST018');
 
 -- --- AUTHORS (20 records) ---
 -- GUIDs for Authors (already 10, add 10 more)
