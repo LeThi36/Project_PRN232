@@ -652,27 +652,19 @@ DECLARE @copy_idForBorrow19 UNIQUEIDENTIFIER = (SELECT TOP 1 copy_id FROM @borro
 DELETE FROM @borrowcopy_ids WHERE copy_id = @copy_idForBorrow19;
 DECLARE @copy_idForBorrow20 UNIQUEIDENTIFIER = (SELECT TOP 1 copy_id FROM @borrowcopy_ids ORDER BY NEWID());
 
--- Assume all @borrowRecordId_X, @userXId, @copy_idForBorrowX variables are already declared and populated with valid GUIDs.
--- If not, you need to include their declarations from the previous scripts BEFORE this INSERT statement.
 
-INSERT INTO Borrow_Records (Id, user_id, copy_id, Borrow_Date, Due_Date, Return_Date, Fine, Status, ExtensionDateCount, CreatedAt, UpdatedAt, DeletedAt) VALUES
-(@borrowRecordId_1, @user6Id, @copy_idForBorrow1, '2025-05-28', '2025-06-07', '2025-06-02', 5.00, 'Returned', 0, '2025-05-28 10:00:00.000', '2025-06-02 11:30:00.000', NULL),
-(@borrowRecordId_2, @user8Id, @copy_idForBorrow2, '2025-06-01', '2025-06-11', '2025-06-05', 0.00, 'Returned', 0, '2025-06-01 11:00:00.000', '2025-06-05 12:45:00.000', NULL),
-(@borrowRecordId_3, @user10Id, @copy_idForBorrow3, '2025-06-05', '2025-06-15', '2025-06-10', 0.00, 'Returned', 0, '2025-06-05 12:00:00.000', '2025-06-10 14:10:00.000', NULL),
-(@borrowRecordId_4, @user3Id, @copy_idForBorrow4, '2025-06-10', '2025-07-05', NULL, 0.00, 'Borrowed', 0, '2025-06-10 09:00:00.000', '2025-06-10 09:00:00.000', NULL),
-(@borrowRecordId_5, @user4Id, @copy_idForBorrow5, '2025-06-13', '2025-07-08', NULL, 0.00, 'Borrowed', 0, '2025-06-13 10:30:00.000', '2025-06-13 10:30:00.000', NULL),
-(@borrowRecordId_6, @user5Id, @copy_idForBorrow6, '2025-06-15', '2025-07-10', NULL, 0.00, 'Borrowed', 0, '2025-06-15 11:15:00.000', '2025-06-15 11:15:00.000', NULL),
-(@borrowRecordId_7, @user7Id, @copy_idForBorrow7, '2025-06-17', '2025-07-12', NULL, 0.00, 'Borrowed', 0, '2025-06-17 14:00:00.000', '2025-06-17 14:00:00.000', NULL),
-(@borrowRecordId_8, @user9Id, @copy_idForBorrow8, '2025-06-18', '2025-07-13', NULL, 0.00, 'Borrowed', 0, '2025-06-18 09:00:00.000', '2025-06-18 09:00:00.000', NULL),
-(@borrowRecordId_9, @user11Id, @copy_idForBorrow9, '2025-06-19', '2025-07-14', NULL, 0.00, 'Borrowed', 0, '2025-06-19 10:00:00.000', '2025-06-19 10:00:00.000', NULL),
-(@borrowRecordId_10, @user12Id, @copy_idForBorrow10, '2025-06-20', '2025-07-15', NULL, 0.00, 'Borrowed', 0, '2025-06-20 11:00:00.000', '2025-06-20 11:00:00.000', NULL),
-(@borrowRecordId_11, @user13Id, @copy_idForBorrow11, '2025-06-21', '2025-07-16', NULL, 0.00, 'Borrowed', 0, '2025-06-21 12:00:00.000', '2025-06-21 12:00:00.000', NULL),
-(@borrowRecordId_12, @user14Id, @copy_idForBorrow12, '2025-06-22', '2025-07-17', NULL, 0.00, 'Borrowed', 0, '2025-06-22 13:00:00.000', '2025-06-22 13:00:00.000', NULL),
-(@borrowRecordId_13, @user15Id, @copy_idForBorrow13, '2025-06-23', '2025-07-18', NULL, 0.00, 'Borrowed', 0, '2025-06-23 14:00:00.000', '2025-06-23 14:00:00.000', NULL),
-(@borrowRecordId_14, @user16Id, @copy_idForBorrow14, '2025-06-24', '2025-07-19', NULL, 0.00, 'Borrowed', 0, '2025-06-24 15:00:00.000', '2025-06-24 15:00:00.000', NULL),
-(@borrowRecordId_15, @user17Id, @copy_idForBorrow15, '2025-06-25', '2025-07-20', NULL, 0.00, 'Borrowed', 0, '2025-06-25 16:00:00.000', '2025-06-25 16:00:00.000', NULL),
-(@borrowRecordId_16, @user18Id, @copy_idForBorrow16, '2025-05-10', '2025-05-20', '2025-05-25', 2.50, 'Returned', 1, '2025-05-10 10:00:00.000', '2025-05-25 11:00:00.000', NULL), 
-(@borrowRecordId_17, @user19Id, @copy_idForBorrow17, '2025-05-15', '2025-05-25', '2025-05-28', 1.00, 'Returned', 0, '2025-05-15 11:00:00.000', '2025-05-28 12:00:00.000', NULL), 
-(@borrowRecordId_18, @user20Id, @copy_idForBorrow18, '2025-05-20', '2025-05-30', '2025-06-02', 3.00, 'Returned', 2, '2025-05-20 12:00:00.000', '2025-06-02 13:00:00.000', NULL), 
-(@borrowRecordId_19, @user3Id, @copy_idForBorrow19, '2025-06-01', '2025-06-11', '2025-06-08', 0.00, 'Returned', 0, '2025-06-01 14:00:00.000', '2025-06-08 15:00:00.000', NULL),
-(@borrowRecordId_20, @user4Id, @copy_idForBorrow20, '2025-05-25', '2025-06-04', '2025-05-30', 0.00, 'Returned', 0, '2025-05-25 15:00:00.000', '2025-05-30 16:00:00.000', NULL);
+INSERT INTO BorrowOrder (Id, UserId, BorrowDate, DueDate, Status, TotalFine, CreatedAt, UpdatedAt, DeletedAt) VALUES
+('00000000-0000-0000-0000-000000000001', '077B5257-7BDE-42EB-B778-10EAAEF61AC2', '2025-06-01', '2025-06-11', 'Returned', 0.00, GETDATE(), GETDATE(), NULL),
+('00000000-0000-0000-0000-000000000002', '0CC4ED45-1084-4EE1-B612-451C30DC9B3D', '2025-06-05', '2025-06-15', 'Borrowed', 2.50, GETDATE(), GETDATE(), NULL);
+INSERT INTO borrow_records (Id, user_id, copy_id, borrow_date, due_date, return_date, fine, status, ExtensionDateCount, BorrowOrderId, CreatedAt, UpdatedAt, DeletedAt) VALUES
+('00000000-0000-0000-0000-000000000011', '077B5257-7BDE-42EB-B778-10EAAEF61AC2', '04C32599-8ED5-415F-A7EE-92C17D3A69CB', '2025-06-01', '2025-06-11', '2025-06-05', 0.00, 'Returned', 0, '00000000-0000-0000-0000-000000000001', GETDATE(), GETDATE(), NULL),
+('00000000-0000-0000-0000-000000000012', '0CC4ED45-1084-4EE1-B612-451C30DC9B3D', '19E3B58A-7396-4221-AFB7-0C1F25E31603', '2025-06-05', '2025-06-15', NULL, 0.00, 'Borrowed', 1, '00000000-0000-0000-0000-000000000002', GETDATE(), GETDATE(), NULL);
+INSERT INTO carts (Id, user_id, CreatedAt, UpdatedAt, DeletedAt) VALUES
+('00000000-0000-0000-0000-0000000000A1', '0F34FA45-D5B6-4DCD-A9CD-14B59C593413', GETDATE(), GETDATE(), NULL),
+('00000000-0000-0000-0000-0000000000A2', '23396BF2-A05A-43D8-B0D7-204404E7D61C', GETDATE(), GETDATE(), NULL);
+INSERT INTO cart_items (Id, cart_id, book_id, quantity, CreatedAt, UpdatedAt, DeletedAt) VALUES
+('00000000-0000-0000-0000-0000000000B1', '00000000-0000-0000-0000-0000000000A1', '025EFF9E-D13D-4FAA-9E54-D12A611DDCF0', 1, GETDATE(), GETDATE(), NULL),
+('00000000-0000-0000-0000-0000000000B2', '00000000-0000-0000-0000-0000000000A2', '0D19F38C-B834-4826-A965-EEC799EA0EBF', 2, GETDATE(), GETDATE(), NULL);
+INSERT INTO RevokedTokens (Id, Token, ExpiryDate, CreatedAt, UpdatedAt, DeletedAt) VALUES
+('00000000-0000-0000-0000-0000000000F1', 'sample-token-123', '2025-12-31', GETDATE(), GETDATE(), NULL),
+('00000000-0000-0000-0000-0000000000F2', 'expired-token-456', '2025-07-15', GETDATE(), GETDATE(), NULL);
