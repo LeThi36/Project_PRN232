@@ -3,15 +3,16 @@ using LibraryWebApp.Handlers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 using System.Text;
 using System.Text.Json;
 
 namespace LibraryWebApp.Pages.Book
 {
-    public class IndexModel : PageModel
+    public class BookSearchModel : PageModel
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly ILogger<IndexModel> _logger;
+        private readonly ILogger<BookSearchModel> _logger;
         private readonly string _apiBaseUrl;
 
         public List<BookDto> Books { get; set; } = new();
@@ -45,11 +46,11 @@ namespace LibraryWebApp.Pages.Book
 
         public string ApiBaseUrl => _apiBaseUrl;
 
-        public IndexModel(IHttpClientFactory httpClientFactory, ILogger<IndexModel> logger, IConfiguration configuration)
+        public BookSearchModel(IHttpClientFactory httpClientFactory, ILogger<BookSearchModel> logger, IConfiguration config)
         {
             _httpClientFactory = httpClientFactory;
             _logger = logger;
-            _apiBaseUrl = configuration["ApiBaseUrl"]!;
+            _apiBaseUrl = config["ApiBaseUrl"]!;
         }
 
         public async Task OnGetAsync()

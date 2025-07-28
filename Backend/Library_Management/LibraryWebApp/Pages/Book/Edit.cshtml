@@ -2,65 +2,111 @@
 @model LibraryWebApp.Pages.Book.EditModel
 @{
     ViewData["Title"] = "Edit Book";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h2>Edit Book</h2>
+<div class="container py-5">
+    <div class="card shadow-lg rounded-3">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Edit Book</h4>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                <div class="row mb-3">
+                    <div class="col-md-4 col-form-label">
+                        <label asp-for="Book.Title" class="form-label"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <input asp-for="Book.Title" class="form-control rounded-2" />
+                        <span asp-validation-for="Book.Title" class="text-danger"></span>
+                    </div>
+                </div>
 
-<form method="post">
-    <div class="form-group">
-        <label asp-for="Book.Title"></label>
-        <input asp-for="Book.Title" class="form-control" />
-        <span asp-validation-for="Book.Title" class="text-danger"></span>
+                <div class="row mb-3">
+                    <div class="col-md-4 col-form-label">
+                        <label asp-for="Book.AuthorId" class="form-label"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <select asp-for="Book.AuthorId" class="form-select rounded-2" asp-items="Model.Authors">
+                            <option value="">-- Select Author --</option>
+                        </select>
+                        <span asp-validation-for="Book.AuthorId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4 col-form-label">
+                        <label asp-for="Book.CategoryId" class="form-label"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <select asp-for="Book.CategoryId" class="form-select rounded-2" asp-items="Model.Categories">
+                            <option value="">-- Select Category --</option>
+                        </select>
+                        <span asp-validation-for="Book.CategoryId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4 col-form-label">
+                        <label asp-for="Book.PublisherId" class="form-label"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <select asp-for="Book.PublisherId" class="form-select rounded-2" asp-items="Model.Publishers">
+                            <option value="">-- Select Publisher --</option>
+                        </select>
+                        <span asp-validation-for="Book.PublisherId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4 col-form-label">
+                        <label asp-for="Book.PublicationYear" class="form-label"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <input asp-for="Book.PublicationYear" class="form-control rounded-2" />
+                        <span asp-validation-for="Book.PublicationYear" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4 col-form-label">
+                        <label asp-for="Book.Description" class="form-label"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <textarea asp-for="Book.Description" class="form-control rounded-2" rows="3"></textarea>
+                        <span asp-validation-for="Book.Description" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4 col-form-label">
+                        <label asp-for="Book.ImageUrl" class="form-label"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <input asp-for="Book.ImageUrl" class="form-control rounded-2" />
+                        <span asp-validation-for="Book.ImageUrl" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4 col-form-label">
+                        <label asp-for="Book.Status" class="form-label"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <input asp-for="Book.Status" class="form-control rounded-2" />
+                        <span asp-validation-for="Book.Status" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a asp-page="Index" class="btn btn-outline-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
 
-    <div class="form-group">
-        <label asp-for="Book.AuthorId"></label>
-        <select asp-for="Book.AuthorId" class="form-control" asp-items="Model.Authors">
-            <option value="">-- Select Author --</option>
-        </select>
-        <span asp-validation-for="Book.AuthorId" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Book.CategoryId"></label>
-        <select asp-for="Book.CategoryId" class="form-control" asp-items="Model.Categories">
-            <option value="">-- Select Category --</option>
-        </select>
-        <span asp-validation-for="Book.CategoryId" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Book.PublisherId"></label>
-        <select asp-for="Book.PublisherId" class="form-control" asp-items="Model.Publishers">
-            <option value="">-- Select Publisher --</option>
-        </select>
-        <span asp-validation-for="Book.PublisherId" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Book.PublicationYear"></label>
-        <input asp-for="Book.PublicationYear" class="form-control" />
-        <span asp-validation-for="Book.PublicationYear" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Book.Description"></label>
-        <textarea asp-for="Book.Description" class="form-control"></textarea>
-        <span asp-validation-for="Book.Description" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Book.ImageUrl"></label>
-        <input asp-for="Book.ImageUrl" class="form-control" />
-        <span asp-validation-for="Book.ImageUrl" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Book.Status"></label>
-        <input asp-for="Book.Status" class="form-control" />
-        <span asp-validation-for="Book.Status" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-success">Save</button>
-    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
-</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
