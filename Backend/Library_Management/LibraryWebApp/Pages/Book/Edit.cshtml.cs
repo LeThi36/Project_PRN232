@@ -87,7 +87,7 @@ namespace LibraryWebApp.Pages.Book
                 Text = p.PublisherName
             }).ToList();
 
-            var authorsRaw = await client.GetFromJsonAsync<List<Author>>("api/Author") ?? new();
+            var authorsRaw = await client.GetFromJsonAsync<List<AuthorResponseDto>>("api/Author") ?? new();
             Authors = authorsRaw.Select(a => new SelectListItem
             {
                 Value = a.Id,
