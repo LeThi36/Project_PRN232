@@ -90,6 +90,42 @@ namespace LibraryWebApp.Pages.Book
             }
         }
 
+        public async Task<IActionResult> OnPostAddToWishlistAsync(string bookId)
+        {
+            var token = Request.Cookies["AccessToken"];
+            // Redirect to login if no access token.
+            // This is crucial as the API requires authentication.
+            if (string.IsNullOrEmpty(token))
+                return RedirectToPage("/Login/Login");
+
+            var apiBaseUrl = _apiBaseUrl; // Ensure _apiBaseUrl is correctly configured
+            var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            // Create an anonymous object matching the BookFavoriteCreateDto structure
+            var dto = new
+            {
+                BookId = bookId // Only send BookId
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(dto), System.Text.Encoding.UTF8, "application/json");
+            var response = await client.PostAsync($"{apiBaseUrl}/api/BookFavorites", content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                // Handle API errors, e.g., log them or display a message to the user
+                _logger.LogWarning("Add to wishlist failed: {StatusCode}. Response: {ResponseBody}", response.StatusCode, await response.Content.ReadAsStringAsync());
+                TempData["ErrorMessage"] = "Đã thêm sách vào yêu thích <3";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Thêm sách vào yêu thích thất bại. Vui lòng thử lại.";
+            }
+
+            return RedirectToPage(); // reload the current page
+        }
+
+
         private async Task<List<SelectListItem>> LoadSelectItems(HttpClient client, string endpoint)
         {
             var items = new List<SelectListItem>();

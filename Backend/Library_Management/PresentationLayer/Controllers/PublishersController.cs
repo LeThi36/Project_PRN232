@@ -151,5 +151,36 @@ namespace PresentationLayer.Controllers
                 return StatusCode(500, $"Error deleting publisher: {ex.Message}");
             }
         }
+
+        /// <summary>
+        /// Lấy danh sách nhà xuất bản có phân trang và tìm kiếm.
+        /// </summary>
+        [HttpGet("paged")]
+        public async Task<IActionResult> GetPagedPublishers(
+            [FromQuery] string? search,
+            [FromQuery] int pageIndex = 1,
+            [FromQuery] int pageSize = 5)
+        {
+            var result = await _publisherService.GetPagedPublishersAsync(search, pageIndex, pageSize);
+
+            var response = new PaginationResult<PublisherResponseDto>(
+                result.Data.Select(p => new PublisherResponseDto
+                {
+                    Id = p.Id,
+                    PublisherName = p.PublisherName,
+                    Address = p.Address,
+                    PhoneNumber = p.PhoneNumber,
+                    CreatedAt = p.CreatedAt,
+                    UpdatedAt = p.UpdatedAt
+                }),
+                result.TotalCount,
+                result.PageIndex,
+                result.PageSize
+            );
+
+            return Ok(response);
+        }
+
+
     }
 }

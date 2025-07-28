@@ -1,6 +1,4 @@
-﻿-----------------------------------------------------------------------------------
--- IF THERE IS NO DATA IN YOUR Project_PRN232 DATABASE, PLEASE DELETE THIS SECTION.
------------------------------------------------------------------------------------
+
 USE Project_PRN232;
 -- Disable foreign key constraints temporarily (for SQL Server)
 EXEC sp_MSforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL'
@@ -17,6 +15,8 @@ DELETE FROM Authors;
 DELETE FROM Categories;
 DELETE FROM Publishers;
 DELETE FROM Roles;
+DELETE FROM borrow_records;
+DELETE FROM RevokedTokens;
 -- Re-enable foreign key constraints
 EXEC sp_MSforeachtable 'ALTER TABLE ? CHECK CONSTRAINT ALL'
 -----------------------------------------------------------------------------------
@@ -63,45 +63,45 @@ DECLARE @user19Id UNIQUEIDENTIFIER = NEWID();
 DECLARE @user20Id UNIQUEIDENTIFIER = NEWID();
 
 INSERT INTO Users (Id, Username, password_hash, Email, Phone_Number, Date_Of_Birth, Gender, Address, role_id, Image_Url, CreatedAt, UpdatedAt, DeletedAt, StudentCode) VALUES
-(@user1Id, 'adminuser', '123123', 'admin@example.com', '0912345678', '1980-01-01', 0, '123 Admin St, City A', @adminrole_id, NULL, '2022-01-15 09:23:53.123', '2024-03-10 14:45:00.567', NULL, 'admin'),
+(@user1Id, 'adminuser', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'admin@example.com', '0912345678', '1980-01-01', 0, '123 Admin St, City A', @adminrole_id, NULL, '2022-01-15 09:23:53.123', '2024-03-10 14:45:00.567', NULL, 'admin'),
 
-(@user2Id, 'librarianuser', '123123', 'lib@example.com', '0912345679', '1985-02-15', 1, '456 Library Rd, City B', @librarianrole_id, NULL,  '2021-05-20 11:00:00.000', '2023-11-25 08:30:15.987', NULL, 'librarian'),
+(@user2Id, 'librarianuser', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'lib@example.com', '0912345679', '1985-02-15', 1, '456 Library Rd, City B', @librarianrole_id, NULL,  '2021-05-20 11:00:00.000', '2023-11-25 08:30:15.987', NULL, 'librarian'),
 
-(@user3Id, 'student1', '123123', 'stu1@example.com', '0912345680', '2000-03-20', 0, '789 Student Apt, City C', @studentrole_id, NULL, '2020-08-01 15:10:20.400', '2022-02-05 16:05:30.120', NULL, 'ST001'),
+(@user3Id, 'student1', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'stu1@example.com', '0912345680', '2000-03-20', 0, '789 Student Apt, City C', @studentrole_id, NULL, '2020-08-01 15:10:20.400', '2022-02-05 16:05:30.120', NULL, 'ST001'),
 
-(@user4Id, 'student2', '123123', 'stu2@example.com', '0912345681', '2001-04-25', 1, '101 Student Dorm, City C', @studentrole_id, NULL, '2023-02-10 07:00:00.000', '2024-09-12 20:10:05.000', NULL, 'ST002'),
+(@user4Id, 'student2', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'stu2@example.com', '0912345681', '2001-04-25', 1, '101 Student Dorm, City C', @studentrole_id, NULL, '2023-02-10 07:00:00.000', '2024-09-12 20:10:05.000', NULL, 'ST002'),
 
-(@user5Id, 'student3', '123123', 'stu3@example.com', '0912345682', '1999-05-30', 0, '202 University Blvd, City C', @studentrole_id, NULL, '2022-07-07 10:30:45.000', '2025-01-01 00:00:00.000', NULL, 'ST003'),
+(@user5Id, 'student3', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'stu3@example.com', '0912345682', '1999-05-30', 0, '202 University Blvd, City C', @studentrole_id, NULL, '2022-07-07 10:30:45.000', '2025-01-01 00:00:00.000', NULL, 'ST003'),
 
-(@user6Id, 'john.doe', '123123', 'john.doe@example.com', '0912345683', '1998-06-01', 0, '303 Oak St, Town D', @studentrole_id, NULL, '2021-03-03 18:20:10.000', '2023-06-15 09:00:00.000', NULL, 'ST004'),
+(@user6Id, 'john.doe', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'john.doe@example.com', '0912345683', '1998-06-01', 0, '303 Oak St, Town D', @studentrole_id, NULL, '2021-03-03 18:20:10.000', '2023-06-15 09:00:00.000', NULL, 'ST004'),
 
-(@user7Id, 'jane.smith', '123123', 'jane.smith@example.com', '0912345684', '2002-07-07', 1, '404 Pine St, Town D', @studentrole_id, NULL, '2024-04-10 13:00:00.000', '2025-05-20 11:30:00.000', NULL, 'ST005'),
+(@user7Id, 'jane.smith', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'jane.smith@example.com', '0912345684', '2002-07-07', 1, '404 Pine St, Town D', @studentrole_id, NULL, '2024-04-10 13:00:00.000', '2025-05-20 11:30:00.000', NULL, 'ST005'),
 
-(@user8Id, 'peter.jones', '123123', 'peter.jones@example.com', '0912345685', '1997-08-10', 0, '505 Maple Ave, Town E', @studentrole_id, NULL, '2020-11-20 08:00:00.000', '2021-12-01 10:10:10.000', NULL, 'ST006'),
+(@user8Id, 'peter.jones', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'peter.jones@example.com', '0912345685', '1997-08-10', 0, '505 Maple Ave, Town E', @studentrole_id, NULL, '2020-11-20 08:00:00.000', '2021-12-01 10:10:10.000', NULL, 'ST006'),
 
-(@user9Id, 'alice.brown', '12213', 'alice.brown@example.com', '0912345686', '2003-09-12', 1, '606 Birch Ln, Town E', @studentrole_id, NULL, '2023-01-01 12:00:00.000', '2024-07-22 17:00:00.000', NULL, 'ST007'),
+(@user9Id, 'alice.brown', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'alice.brown@example.com', '0912345686', '2003-09-12', 1, '606 Birch Ln, Town E', @studentrole_id, NULL, '2023-01-01 12:00:00.000', '2024-07-22 17:00:00.000', NULL, 'ST007'),
 
-(@user10Id, 'bob.white', '123123', 'bob.white@example.com', '0912345687', '1996-10-15', 0, '707 Cedar Dr, Town F', @studentrole_id, NULL, '2022-09-15 09:45:00.000', '2025-06-01 06:00:00.000', NULL, 'ST008'),
+(@user10Id, 'bob.white', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'bob.white@example.com', '0912345687', '1996-10-15', 0, '707 Cedar Dr, Town F', @studentrole_id, NULL, '2022-09-15 09:45:00.000', '2025-06-01 06:00:00.000', NULL, 'ST008'),
 
-(@user11Id, 'charlie.green', '123123', 'charlie.green@example.com', '0912345688', '2004-11-20', 0, '808 Elm Rd, Town F', @studentrole_id, NULL, '2024-02-28 14:00:00.000', '2025-03-05 09:00:00.000', NULL, 'ST009'),
+(@user11Id, 'charlie.green', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'charlie.green@example.com', '0912345688', '2004-11-20', 0, '808 Elm Rd, Town F', @studentrole_id, NULL, '2024-02-28 14:00:00.000', '2025-03-05 09:00:00.000', NULL, 'ST009'),
 
-(@user12Id, 'diana.king', '123123', 'diana.king@example.com', '0912345689', '1995-12-25', 1, '909 Willow Cres, Town G', @studentrole_id, NULL, '2020-03-10 11:00:00.000', '2021-04-20 15:00:00.000', NULL, 'ST010'),
+(@user12Id, 'diana.king', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'diana.king@example.com', '0912345689', '1995-12-25', 1, '909 Willow Cres, Town G', @studentrole_id, NULL, '2020-03-10 11:00:00.000', '2021-04-20 15:00:00.000', NULL, 'ST010'),
 
-(@user13Id, 'eva.lopez', '123123', 'eva.lopez@example.com', '0912345690', '2000-01-05', 1, '111 Poplar Blvd, Town G', @studentrole_id, NULL, '2023-05-01 10:00:00.000', '2024-10-10 19:00:00.000', NULL, 'ST011'),
+(@user13Id, 'eva.lopez', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'eva.lopez@example.com', '0912345690', '2000-01-05', 1, '111 Poplar Blvd, Town G', @studentrole_id, NULL, '2023-05-01 10:00:00.000', '2024-10-10 19:00:00.000', NULL, 'ST011'),
 
-(@user14Id, 'frank.moore', '123123', 'frank.moore@example.com', '0912345691', '1997-02-14', 0, '222 Aspen Pkwy, Town H', @studentrole_id, NULL, '2021-01-20 09:00:00.000', '2022-08-08 11:00:00.000', NULL, 'ST012'),
+(@user14Id, 'frank.moore', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'frank.moore@example.com', '0912345691', '1997-02-14', 0, '222 Aspen Pkwy, Town H', @studentrole_id, NULL, '2021-01-20 09:00:00.000', '2022-08-08 11:00:00.000', NULL, 'ST012'),
 
-(@user15Id, 'grace.hall', '123123', 'grace.hall@example.com', '0912345692', '2001-03-03', 1, '333 Spruce St, Town H', @studentrole_id, NULL, '2024-01-05 16:00:00.000', '2025-04-15 14:00:00.000', NULL, 'ST013'),
+(@user15Id, 'grace.hall', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'grace.hall@example.com', '0912345692', '2001-03-03', 1, '333 Spruce St, Town H', @studentrole_id, NULL, '2024-01-05 16:00:00.000', '2025-04-15 14:00:00.000', NULL, 'ST013'),
 
-(@user16Id, 'harry.clark', '123123', 'harry.clark@example.com', '0912345693', '1994-04-08', 0, '444 Palm Ave, Town I', @studentrole_id, NULL, '2020-07-01 10:00:00.000', '2021-09-30 17:00:00.000', NULL, 'ST014'),
+(@user16Id, 'harry.clark', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'harry.clark@example.com', '0912345693', '1994-04-08', 0, '444 Palm Ave, Town I', @studentrole_id, NULL, '2020-07-01 10:00:00.000', '2021-09-30 17:00:00.000', NULL, 'ST014'),
 
-(@user17Id, 'ivy.davis', '123123', 'ivy.davis@example.com', '0912345694', '2002-05-19', 1, '555 Cherry Ln, Town I', @studentrole_id, NULL, '2023-08-12 11:00:00.000', '2024-11-01 10:00:00.000', NULL, 'ST015'),
+(@user17Id, 'ivy.davis', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'ivy.davis@example.com', '0912345694', '2002-05-19', 1, '555 Cherry Ln, Town I', @studentrole_id, NULL, '2023-08-12 11:00:00.000', '2024-11-01 10:00:00.000', NULL, 'ST015'),
 
-(@user18Id, 'jack.evans', '123123', 'jack.evans@example.com', '0912345695', '1999-06-21', 0, '666 Vine Dr, Town J', @studentrole_id, NULL, '2021-06-20 14:00:00.000', '2023-01-25 12:00:00.000', NULL, 'ST016'),
+(@user18Id, 'jack.evans', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'jack.evans@example.com', '0912345695', '1999-06-21', 0, '666 Vine Dr, Town J', @studentrole_id, NULL, '2021-06-20 14:00:00.000', '2023-01-25 12:00:00.000', NULL, 'ST016'),
 
-(@user19Id, 'kathy.harris', '123123', 'kathy.harris@example.com', '0912345696', '2003-07-30', 1, '777 Peach Blvd, Town J', @studentrole_id, NULL, '2024-06-01 09:00:00.000', '2025-06-20 15:00:00.000', NULL, 'ST017'),
+(@user19Id, 'kathy.harris', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'kathy.harris@example.com', '0912345696', '2003-07-30', 1, '777 Peach Blvd, Town J', @studentrole_id, NULL, '2024-06-01 09:00:00.000', '2025-06-20 15:00:00.000', NULL, 'ST017'),
 
-(@user20Id, 'leo.jackson', '123123', 'leo.jackson@example.com', '0912345697', '1996-08-05', 0, '888 Plum Pkwy, Town K', @studentrole_id, NULL, '2022-04-01 08:00:00.000', '2025-06-25 10:00:00.000', NULL, 'ST018');
+(@user20Id, 'leo.jackson', '$2a$11$Si7Ta3ruNYVrXWqw5EuSEu6EaIRbPbcH2dhN8tqMBszcXQAXxw9r.', 'leo.jackson@example.com', '0912345697', '1996-08-05', 0, '888 Plum Pkwy, Town K', @studentrole_id, NULL, '2022-04-01 08:00:00.000', '2025-06-25 10:00:00.000', NULL, 'ST018');
 
 -- --- AUTHORS (20 records) ---
 -- GUIDs for Authors (already 10, add 10 more)
@@ -266,46 +266,46 @@ DECLARE @book19Id UNIQUEIDENTIFIER = NEWID();
 DECLARE @book20Id UNIQUEIDENTIFIER = NEWID();
 
 INSERT INTO Books (Id, Title, author_id, category_id, publisher_id, publication_year, Description, Status, Image_Url, CreatedAt, UpdatedAt, DeletedAt) VALUES
-(@book1Id, 'The Shining', @author1Id, @category1Id, @publisher1Id, 1977, 'Horror novel by Stephen King.', 'Available', 'https://example.com/shining.jpg',
+(@book1Id, 'The Shining', @author1Id, @category1Id, @publisher1Id, 1977, 'Horror novel by Stephen King.', 'Available', 'https://res.cloudinary.com/dueorhssn/image/upload/v1753720374/a41a2a63-9a86-4640-9a58-fd55362a9317.png',
     '2020-01-05 10:00:00.000', '2024-03-10 15:30:00.000', NULL),
-(@book2Id, 'Harry Potter and the Sorcerer''s Stone', @author2Id, @category4Id, @publisher2Id, 1997, 'First book in the Harry Potter series.', 'Available', 'https://example.com/hp1.jpg',
+(@book2Id, 'Harry Potter and the Sorcerer''s Stone', @author2Id, @category4Id, @publisher2Id, 1997, 'First book in the Harry Potter series.', 'Available', 'https://res.cloudinary.com/dueorhssn/image/upload/v1753720575/a6ab2dff-836d-434c-8ff2-b53dec7a7886.png',
     '2021-02-15 11:30:00.000', '2023-10-20 09:00:00.000', NULL),
-(@book3Id, 'A Game of Thrones', @author3Id, @category4Id, @publisher3Id, 1996, 'First book of A Song of Ice and Fire.', 'Available', 'https://example.com/got.jpg',
+(@book3Id, 'A Game of Thrones', @author3Id, @category4Id, @publisher3Id, 1996, 'First book of A Song of Ice and Fire.', 'Available', 'https://res.cloudinary.com/dueorhssn/image/upload/v1753720255/e66c2831-9d02-40ab-b59b-777aa2e5931e.png',
     '2020-06-20 14:00:00.000', '2022-09-01 16:00:00.000', NULL),
-(@book4Id, 'And Then There Were None', @author4Id, @category6Id, @publisher4Id, 1939, 'Classic mystery novel.', 'Available', 'https://example.com/agatha.jpg',
+(@book4Id, 'And Then There Were None', @author4Id, @category6Id, @publisher4Id, 1939, 'Classic mystery novel.', 'Available', 'https://res.cloudinary.com/dueorhssn/image/upload/v1753720757/225c7052-2f62-4b23-9a7f-5e3874c2aa15.png',
     '2022-04-01 09:00:00.000', '2025-01-15 10:00:00.000', NULL),
-(@book5Id, 'Norwegian Wood', @author5Id, @category1Id, @publisher5Id, 1987, 'Coming-of-age novel by Haruki Murakami.', 'Available', 'https://example.com/norwegian.jpg',
+(@book5Id, 'Norwegian Wood', @author5Id, @category1Id, @publisher5Id, 1987, 'Coming-of-age novel by Haruki Murakami.', 'Available', 'https://res.cloudinary.com/dueorhssn/image/upload/v1753719770/0ddca925-a803-41af-bef6-ad2b4dc3c135.png',
     '2021-09-01 12:00:00.000', '2024-02-20 08:30:00.000', NULL),
-(@book6Id, 'Tôi Thấy Hoa Vàng Trên Cỏ Xanh', @author6Id, @category1Id, @publisher6Id, 2010, 'Tiểu thuyết của Nguyễn Nhật Ánh.', 'Available', 'https://example.com/hoavang.jpg',
+(@book6Id, 'Tôi Thấy Hoa Vàng Trên Cỏ Xanh', @author6Id, @category1Id, @publisher6Id, 2010, 'Tiểu thuyết của Nguyễn Nhật Ánh.', 'Available', 'https://res.cloudinary.com/dueorhssn/image/upload/v1753720942/07a7d1c2-a38e-4106-842b-98f927baeaa2.png',
     '2020-03-01 10:00:00.000', '2023-07-10 14:00:00.000', NULL),
-(@book7Id, 'Dế Mèn Phiêu Lưu Ký', @author7Id, @category15Id, @publisher7Id, 1941, 'Truyện thiếu nhi kinh điển.', 'Available', 'https://example.com/demen.jpg',
+(@book7Id, 'Dế Mèn Phiêu Lưu Ký', @author7Id, @category15Id, @publisher7Id, 1941, 'Truyện thiếu nhi kinh điển.', 'Available', 'https://res.cloudinary.com/dueorhssn/image/upload/v1753720704/f76307df-3f05-4ea8-88a8-fc20d69dc06a.png',
     '2021-07-05 09:00:00.000', '2024-05-01 16:00:00.000', NULL),
-(@book8Id, 'Đi Qua Hoa Cúc', @author8Id, @category7Id, @publisher8Id, 2008, 'Tập truyện ngắn lãng mạn.', 'Available', 'https://example.com/hoacuc.jpg',
+(@book8Id, 'Đi Qua Hoa Cúc', @author8Id, @category7Id, @publisher8Id, 2008, 'Tập truyện ngắn lãng mạn.', 'Available', 'https://res.cloudinary.com/dueorhssn/image/upload/v1753720642/261e8619-c7ce-404d-9090-6b563d4c50ed.png',
     '2022-10-20 11:00:00.000', '2025-04-10 09:00:00.000', NULL),
-(@book9Id, 'Cho Một Tình Yêu', @author9Id, @category7Id, @publisher9Id, 2007, 'Tản văn về tình yêu.', 'Available', 'https://example.com/tinhyv.jpg',
+(@book9Id, 'Cho Một Tình Yêu', @author9Id, @category7Id, @publisher9Id, 2007, 'Tản văn về tình yêu.', 'Available', 'https://res.cloudinary.com/dueorhssn/image/upload/v1753720911/04e3791b-20ce-44c8-822a-f9f66e43128a.png',
     '2021-04-10 14:00:00.000', '2023-11-05 12:00:00.000', NULL),
-(@book10Id, 'Tắt Đèn', @author10Id, @category3Id, @publisher10Id, 1937, 'Tiểu thuyết hiện thực phê phán.', 'Available', 'https://example.com/tatden.jpg',
+(@book10Id, 'Tắt Đèn', @author10Id, @category3Id, @publisher10Id, 1937, 'Tiểu thuyết hiện thực phê phán.', 'Available', 'https://res.cloudinary.com/dueorhssn/image/upload/v1753720391/f670914f-dc0b-4024-9633-ca5318f933bf.png',
     '2020-09-25 07:00:00.000', '2022-12-01 15:00:00.000', NULL),
-(@book11Id, 'Truyện Kiều', @author11Id, @category16Id, @publisher6Id, 1820, 'Kiệt tác thơ nôm của Nguyễn Du.', 'Available', 'https://example.com/truyenkie.jpg',
+(@book11Id, 'Truyện Kiều', @author11Id, @category16Id, @publisher6Id, 1820, 'Kiệt tác thơ nôm của Nguyễn Du.', 'Available', 'https://res.cloudinary.com/dueorhssn/image/upload/v1753720669/3d9524b3-cd98-4b65-a086-fa937e825af1.png',
     '2023-01-10 12:00:00.000', '2024-07-01 10:00:00.000', NULL),
-(@book12Id, 'Số Đỏ', @author12Id, @category1Id, @publisher7Id, 1938, 'Tiểu thuyết trào phúng của Vũ Trọng Phụng.', 'Available', 'https://example.com/sodo.jpg',
+(@book12Id, 'Số Đỏ', @author12Id, @category1Id, @publisher7Id, 1938, 'Tiểu thuyết trào phúng của Vũ Trọng Phụng.', 'Available', 'https://res.cloudinary.com/dueorhssn/image/upload/v1753720867/c2819dec-211f-434d-a456-79a5a9a69a92.png',
     '2022-05-20 10:00:00.000', '2025-03-01 13:00:00.000', NULL),
-(@book13Id, 'The Old Man and the Sea', @author13Id, @category1Id, @publisher17Id, 1952, 'A novella by Ernest Hemingway.', 'Available', 'https://example.com/oldmansea.jpg',
+(@book13Id, 'The Old Man and the Sea', @author13Id, @category1Id, @publisher17Id, 1952, 'A novella by Ernest Hemingway.', 'Available', 'https://res.cloudinary.com/dueorhssn/image/upload/v1753720728/368adabe-55c3-4851-a8df-79a015afff1a.png',
     '2021-03-01 08:00:00.000', '2023-05-10 16:00:00.000', NULL),
-(@book14Id, 'Pride and Prejudice', @author14Id, @category7Id, @publisher17Id, 1813, 'A romance novel by Jane Austen.', 'Available', 'https://example.com/prideprejudice.jpg',
+(@book14Id, 'Pride and Prejudice', @author14Id, @category7Id, @publisher17Id, 1813, 'A romance novel by Jane Austen.', 'Available', 'https://res.cloudinary.com/dueorhssn/image/upload/v1753720616/a4657345-1b1c-4ae2-81a3-fb5a451c3616.png',
     '2020-11-01 11:00:00.000', '2023-01-01 09:00:00.000', NULL),
-(@book15Id, 'The Great Gatsby', @author15Id, @category1Id, @publisher17Id, 1925, 'A novel by F. Scott Fitzgerald.', 'Available', 'https://example.com/gatsby.jpg',
+(@book15Id, 'The Great Gatsby', @author15Id, @category1Id, @publisher17Id, 1925, 'A novel by F. Scott Fitzgerald.', 'Available', 'https://res.cloudinary.com/dueorhssn/image/upload/v1753720489/bb0ca0e8-2873-438a-8100-fc0cc02a2c19.png',
     '2023-04-15 15:00:00.000', '2024-12-10 14:00:00.000', NULL),
-(@book16Id, 'War and Peace', @author16Id, @category1Id, @publisher17Id, 1869, 'An epic novel by Leo Tolstoy.', 'Available', 'https://example.com/warpeace.jpg',
+(@book16Id, 'War and Peace', @author16Id, @category1Id, @publisher17Id, 1869, 'An epic novel by Leo Tolstoy.', 'Available', 'https://res.cloudinary.com/dueorhssn/image/upload/v1753720965/6b6a5492-100a-4c60-96ae-aaedb70abdf1.png',
     '2021-07-20 12:00:00.000', '2024-02-01 11:00:00.000', NULL),
-(@book17Id, 'The Adventures of Tom Sawyer', @author17Id, @category15Id, @publisher18Id, 1876, 'A classic American novel by Mark Twain.', 'Available', 'https://example.com/tomsawyer.jpg',
+(@book17Id, 'The Adventures of Tom Sawyer', @author17Id, @category15Id, @publisher18Id, 1876, 'A classic American novel by Mark Twain.', 'Available', 'https://res.cloudinary.com/dueorhssn/image/upload/v1753720782/c3834f97-a891-499f-9616-7e9ee55a13bc.png',
     '2022-08-10 09:00:00.000', '2025-05-15 10:00:00.000', NULL),
-(@book18Id, 'One Hundred Years of Solitude', @author18Id, @category1Id, @publisher17Id, 1967, 'A masterpiece by Gabriel Garcia Marquez.', 'Available', 'https://example.com/solitude.jpg',
+(@book18Id, 'One Hundred Years of Solitude', @author18Id, @category1Id, @publisher17Id, 1967, 'A masterpiece by Gabriel Garcia Marquez.', 'Available', 'https://res.cloudinary.com/dueorhssn/image/upload/v1753719997/e22bc76b-e8e8-4d3c-b7be-e7434f02ce2b.png',
     '2020-05-05 16:00:00.000', '2023-06-10 13:00:00.000', NULL),
-(@book19Id, 'Thầy Thuốc', @author19Id, @category1Id, @publisher19Id, 1920, 'Tiểu thuyết của Hồ Biểu Chánh.', 'Available', 'https://example.com/thaythuoc.jpg',
-    '2023-07-05 10:00:00.000', '2025-06-20 16:00:00.000', NULL), 
-(@book20Id, 'Chí Phèo', @author20Id, @category1Id, @publisher20Id, 1941, 'Truyện ngắn nổi tiếng của Nam Cao.', 'Available', 'https://example.com/chipheo.jpg',
-    '2022-02-05 08:00:00.000', '2025-06-26 18:00:00.000', NULL); 
+(@book19Id, 'Thầy Thuốc', @author19Id, @category1Id, @publisher19Id, 1920, 'Tiểu thuyết của Hồ Biểu Chánh.', 'Available', 'https://res.cloudinary.com/dueorhssn/image/upload/v1753720836/fac64caf-c659-4473-9624-db3832e2165.png',
+    '2023-07-05 10:00:00.000', '2025-06-20 16:00:00.000', NULL),
+(@book20Id, 'Chí Phèo', @author20Id, @category1Id, @publisher20Id, 1941, 'Truyện ngắn nổi tiếng của Nam Cao.', 'Available', 'https://res.cloudinary.com/dueorhssn/image/upload/v1753720518/b7044180-648e-47c0-af1d-74ee3305bf16.png',
+    '2022-02-05 08:00:00.000', '2025-06-26 18:00:00.000', NULL);
 
 -- --- BOOK COPIES (40 records - 2 copies per book) ---
 -- Declare GUIDs for 40 book copies
@@ -651,7 +651,6 @@ DELETE FROM @borrowcopy_ids WHERE copy_id = @copy_idForBorrow18;
 DECLARE @copy_idForBorrow19 UNIQUEIDENTIFIER = (SELECT TOP 1 copy_id FROM @borrowcopy_ids ORDER BY NEWID());
 DELETE FROM @borrowcopy_ids WHERE copy_id = @copy_idForBorrow19;
 DECLARE @copy_idForBorrow20 UNIQUEIDENTIFIER = (SELECT TOP 1 copy_id FROM @borrowcopy_ids ORDER BY NEWID());
-
 
 INSERT INTO BorrowOrder (Id, UserId, BorrowDate, DueDate, Status, TotalFine, CreatedAt, UpdatedAt, DeletedAt) VALUES
 ('00000000-0000-0000-0000-000000000001', '077B5257-7BDE-42EB-B778-10EAAEF61AC2', '2025-06-01', '2025-06-11', 'Returned', 0.00, GETDATE(), GETDATE(), NULL),

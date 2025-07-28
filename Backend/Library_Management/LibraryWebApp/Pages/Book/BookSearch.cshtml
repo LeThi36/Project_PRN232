@@ -63,6 +63,13 @@
                             <td>@book.AuthorName</td>
                             <td>@book.CategoryName</td>
                             <td>@book.PublisherName</td>
+                            <td class="text-center">
+                                <form method="post" asp-page-handler="AddToWishlist" asp-route-bookId="@book.Id" style="display:inline;">
+                                    <button type="submit" class="btn p-0 border-0 bg-transparent" title="Add to wishlist">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                     }
                 </tbody>

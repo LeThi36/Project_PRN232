@@ -1844,9 +1844,11 @@ span {
 }
 
 .header-main {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
 }
 @media (max-width: 1199px) {
   .header-main .main-menu {
