@@ -1,6 +1,7 @@
 ﻿using BussinessLayer.DTOs.Author;
 using BussinessLayer.Services.Interface;
 using DataLayer.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PresentationLayer.Controllers

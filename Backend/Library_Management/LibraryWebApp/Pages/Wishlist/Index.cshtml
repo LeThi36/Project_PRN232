@@ -1,0 +1,97 @@
+﻿@page
+@model LibraryWebApp.Pages.Wishlist.IndexModel
+@{
+    ViewData["Title"] = "Wishlist";
+}
+
+<!-- Breadcumb Section Start -->
+<div class="breadcrumb-wrapper">
+    <div class="book1">
+        <img src="~/img/hero/book1.png" alt="book">
+    </div>
+    <div class="book2">
+        <img src="~/img/hero/book2.png" alt="book">
+    </div>
+    <div class="container">
+        <div class="page-heading">
+            <h1>Wishlist</h1>
+            <div class="page-header">
+                <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
+                    <li>
+                        <a asp-page="/Index">Home</a>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </li>
+                    <li>Wishlist</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Wishlist Table -->
+<div class="cart-section section-padding">
+    <div class="container">
+        <div class="main-cart-wrapper">
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Book</th>
+                                    <th>Author</th>
+                                    <th>Added At</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.WishlistItems)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <img src="@item.ImageUrl" alt="@item.BookTitle" width="60" height="80" class="rounded shadow-sm" />
+                                                <span class="fw-bold">@item.BookTitle</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span>@item.AuthorName</span>
+                                        </td>
+                                        <td>
+                                            <span>@item.AddedAt?.ToString("dd/MM/yyyy")</span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex gap-2 align-items-center">
+                                                <!-- Remove -->
+                                                <form method="post" asp-page-handler="Remove" asp-route-bookId="@item.BookId" onsubmit="return confirm('Remove this book from wishlist?');">
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm" title="Remove from wishlist">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </form>
+
+                                                <!-- Add to cart -->
+                                                <form method="post" asp-page-handler="AddToCart" asp-route-bookId="@item.BookId">
+                                                    <button type="submit" class="btn btn-outline-success btn-sm" title="Add to cart">
+                                                        <i class="fa fa-cart-plus"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        @if (!Model.WishlistItems.Any())
+                        {
+                            <div class="text-center mt-4">
+                                <p class="text-muted">Your wishlist is empty.</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

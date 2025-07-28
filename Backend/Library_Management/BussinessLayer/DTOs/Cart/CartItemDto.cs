@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BussinessLayer.DTOs.BookFavorite
+namespace BussinessLayer.DTOs.Cart
 {
-    public class BookFavoriteDto
+    public class CartItemDto
     {
         public string BookId { get; set; } = null!;
         public string BookTitle { get; set; } = null!;
-        public string? AuthorName { get; set; }
-        public string? ImageUrl { get; set; }
-        public DateTime? AddedAt { get; set; }
+        public string AuthorName { get; set; } = null!;
+        public int Quantity { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

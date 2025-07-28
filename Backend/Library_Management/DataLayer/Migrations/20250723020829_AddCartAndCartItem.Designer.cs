@@ -4,6 +4,7 @@ using DataLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(ProjectPrn232Context))]
-    partial class ProjectPrn232ContextModelSnapshot : ModelSnapshot
+    [Migration("20250723020829_AddCartAndCartItem")]
+    partial class AddCartAndCartItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -423,14 +426,13 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("user_id");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "UserId" }, "IX_carts_user_id");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("carts");
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.CartItem", b =>
@@ -440,13 +442,11 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("BookId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("book_id");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CartId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("cart_id");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -455,19 +455,18 @@ namespace DataLayer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("int")
-                        .HasColumnName("quantity");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "BookId" }, "IX_cart_items_book_id");
+                    b.HasIndex("BookId");
 
-                    b.HasIndex(new[] { "CartId" }, "IX_cart_items_cart_id");
+                    b.HasIndex("CartId");
 
-                    b.ToTable("cart_items");
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Category", b =>

@@ -8,20 +8,20 @@ using BussinessLayer.Mappings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using System.IdentityModel.Tokens.Jwt;
+using BussinessLayer.Helper.FileService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Đăng ký DbContext
 builder.Services.AddDbContext<ProjectPrn232Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Cấu hình Dependency Injection
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(IPaginationRepository<>), typeof(PaginationRepository<>));
 
@@ -36,17 +36,33 @@ builder.Services.AddScoped<IPublisherService, PublisherService>();
 builder.Services.AddScoped<IBookCopyService, BookCopyService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICartService, CartService>();
+
+builder.Services.AddScoped<IFileService, FileService>();
 
 
-// Register AutoMapper
+// Đăng ký AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+// ✅ Cấu hình CORS cho phép frontend gọi API
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("https://localhost:7007") // Port frontend
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 // Cấu hình xác thực JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
+            SaveSigninToken = true,
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
@@ -56,27 +72,34 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
 
-        // Thêm kiểm tra custom để vô hiệu hóa token (blacklist)
+        // Thêm kiểm tra token bị thu hồi
         options.Events = new JwtBearerEvents
         {
+            OnAuthenticationFailed = context => // Thêm event này để bắt lỗi chi tiết hơn
+            {
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>().CreateLogger(nameof(JwtBearerEvents));
+                logger.LogError("Authentication failed: {0}", context.Exception.Message);
+                return Task.CompletedTask;
+            },
             OnTokenValidated = async context =>
             {
-                var token = context.SecurityToken as JwtSecurityToken;
-                if (token == null)
+                // Lấy raw token từ header
+                var auth = context.Request.Headers["Authorization"].ToString();
+                if (!auth.StartsWith("Bearer "))
                 {
                     context.Fail("Token không hợp lệ.");
                     return;
                 }
+                var tokenString = auth.Substring("Bearer ".Length).Trim();
 
-                var tokenString = token.RawData; // Lấy chuỗi token gốc
+                // Lấy IRevokedTokenService từ DI container
+                var revokedTokenService = context.HttpContext.RequestServices
+                    .GetRequiredService<IRevokedTokenService>();
 
-                // Lấy dịch vụ IRevokedTokenService từ service provider
-                var revokedTokenService = context.HttpContext.RequestServices.GetRequiredService<IRevokedTokenService>();
-
-                // Kiểm tra xem token có bị thu hồi không
+                // Kiểm tra token có bị thu hồi không
                 if (await revokedTokenService.IsTokenRevokedAsync(tokenString))
                 {
-                    context.Fail("Token đã bị vô hiệu hóa."); // Vô hiệu hóa ngữ cảnh xác thực
+                    context.Fail("Token đã bị vô hiệu hóa.");
                 }
             }
         };
@@ -106,6 +129,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// ✅ Áp dụng CORS ở đây (trước Authentication)
 app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
