@@ -13,6 +13,7 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IPublisherService, PublisherService>();
+builder.Services.AddScoped<IBookCopyService, BookCopyService>();
 builder.Services.AddDbContext<ProjectPrn232Context>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));

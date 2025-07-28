@@ -3,6 +3,7 @@ using BussinessLayer.DTOs.NewFolder1;
 using BussinessLayer.Services.Interface;
 using DataLayer.Entities;
 using DataLayer.Repositories.Abstraction;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,12 @@ namespace BussinessLayer.Services
     public class BookCopyService : IBookCopyService
     {
         private readonly IGenericRepository<BookCopy> _copyRepo;
+        private readonly ProjectPrn232Context _context;
 
-        public BookCopyService(IGenericRepository<BookCopy> copyRepo)
+        public BookCopyService(IGenericRepository<BookCopy> copyRepo, ProjectPrn232Context context)
         {
             _copyRepo = copyRepo;
+            _context = context;
         }
 
         public async Task<BookCopy> CreateAsync(BookCopyCreateDto dto)
@@ -59,5 +62,37 @@ namespace BussinessLayer.Services
         {
             return await _copyRepo.GetAllAsync(c => c.BookId == bookId);
         }
+
+        public async Task<PaginationResult<BookCopyResponseDto>> GetPagedAsync(
+    string bookId, string? search, string? status, int page, int pageSize)
+        {
+            var query = _context.BookCopies
+                .Where(c => c.BookId == bookId);
+
+            if (!string.IsNullOrEmpty(search))
+                query = query.Where(c => c.CopyCode.Contains(search));
+
+            if (!string.IsNullOrEmpty(status))
+                query = query.Where(c => c.Status == status);
+
+            int total = await query.CountAsync();
+
+            var items = await query
+                .OrderByDescending(c => c.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(c => new BookCopyResponseDto
+                {
+                    Id = c.Id,
+                    CopyCode = c.CopyCode,
+                    Status = c.Status,
+                    BookId = c.BookId,
+                    CreatedAt = c.CreatedAt
+                })
+                .ToListAsync();
+
+            return new PaginationResult<BookCopyResponseDto>(items, total, page, pageSize);
+        }
+
     }
 }
