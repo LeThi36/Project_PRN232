@@ -66,15 +66,13 @@ namespace PresentationLayer.Controllers
 
             return Ok(result);
         }
-        
+
         [HttpGet("available/{bookId}")]
         public async Task<IActionResult> GetAvailableCopies(string bookId)
         {
             var available = await _service.GetAvailableCopiesAsync(bookId);
             return Ok(available);
         }
-    }
-
         [HttpGet("paged")]
         public async Task<IActionResult> GetPaged(
     [FromQuery] string bookId,
@@ -98,3 +96,4 @@ namespace PresentationLayer.Controllers
 
     }
 }
+

@@ -10,6 +10,7 @@ namespace BussinessLayer.DTOs.BorrowRecord
     {
         public string Id { get; set; }
         public string UserId { get; set; }
+        public string? StudentCode { get; set; }
         public DateTime BorrowDate { get; set; }
         public DateTime DueDate { get; set; }
         public string Status { get; set; }

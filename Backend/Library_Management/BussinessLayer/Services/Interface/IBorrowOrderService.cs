@@ -18,5 +18,8 @@ namespace BussinessLayer.Services.Interface
         // Lấy danh sách đơn mượn của sinh viên
         Task<List<BorrowOrderDto>> GetOrdersByStudentAsync(string studentCode);
         Task<bool> CancelBorrowOrderAsync(string orderId);
+        Task<List<BorrowOrderDto>> GetAllOrdersAsync();
+        Task<List<BorrowOrderDto>> SearchOrdersAsync(string? studentCode, string? status);
+
     }
 }

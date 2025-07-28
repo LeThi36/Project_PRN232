@@ -91,7 +91,7 @@ namespace BussinessLayer.Services
             var now = DateTime.Now;
             var due = now.AddDays(15);
 
-            order.Status = "Approved";
+            order.Status = "Borrowed";
             order.BorrowDate = now;
             order.DueDate = due;
 
@@ -172,6 +172,44 @@ namespace BussinessLayer.Services
 
             await _context.SaveChangesAsync();
             return true;
+        }
+        public async Task<List<BorrowOrderDto>> GetAllOrdersAsync()
+        {
+            var orders = await _context.BorrowOrders
+                .Include(o => o.User)
+                .Include(o => o.BorrowRecords)
+                    .ThenInclude(r => r.Copy)
+                        .ThenInclude(c => c.Book)
+                .OrderBy(o => o.Status == "Pending" ? 0 :
+                              o.Status == "Borrowed" ? 1 :
+                              o.Status == "Returned" ? 2 :
+                              o.Status == "Cancelled" ? 3 : 4)
+                .ThenByDescending(o => o.BorrowDate) // nếu cùng status thì sort theo ngày mượn mới nhất
+                .ToListAsync();
+
+            return _mapper.Map<List<BorrowOrderDto>>(orders);
+        }
+        public async Task<List<BorrowOrderDto>> SearchOrdersAsync(string? studentCode, string? status)
+        {
+            var query = _context.BorrowOrders
+                .Include(o => o.User)
+                .Include(o => o.BorrowRecords)
+                    .ThenInclude(r => r.Copy)
+                        .ThenInclude(c => c.Book)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(studentCode))
+            {
+                query = query.Where(o => o.User.StudentCode.Contains(studentCode));
+            }
+
+            if (!string.IsNullOrWhiteSpace(status) && status != "All")
+            {
+                query = query.Where(o => o.Status == status);
+            }
+
+            var result = await query.ToListAsync();
+            return _mapper.Map<List<BorrowOrderDto>>(result);
         }
 
 
