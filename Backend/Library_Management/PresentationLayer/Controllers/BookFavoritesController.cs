@@ -1,5 +1,6 @@
 ﻿using BussinessLayer.DTOs.BookFavorite;
 using BussinessLayer.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -18,6 +19,7 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "0,1,2")]
         public async Task<IActionResult> AddToFavorites([FromBody] BookFavoriteCreateDto dto)
         {
             try
@@ -49,12 +51,14 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpGet("student/{studentCode}")]
+        [Authorize(Roles = "0,1,2")]
         public async Task<IActionResult> GetFavoritesByStudentCode(string studentCode)
         {
             var result = await _service.GetFavoritesByStudentCodeAsync(studentCode);
             return Ok(result);
         }
         [HttpDelete("{bookId}/student/{studentCode}")]
+        [Authorize(Roles = "0,1,2")]
         public async Task<IActionResult> RemoveFavorite(string bookId, string studentCode)
         {
             var success = await _service.RemoveFavoriteByStudentCodeAsync(bookId, studentCode);

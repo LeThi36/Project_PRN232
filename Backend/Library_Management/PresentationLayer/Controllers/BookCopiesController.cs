@@ -3,6 +3,7 @@ using BussinessLayer.DTOs.BookCopy;
 using BussinessLayer.DTOs.NewFolder1;
 using BussinessLayer.Services;
 using BussinessLayer.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PresentationLayer.Controllers
@@ -20,6 +21,7 @@ namespace PresentationLayer.Controllers
 
         // POST
         [HttpPost]
+        [Authorize(Roles = "0,1")]
         public async Task<IActionResult> Create([FromBody] BookCopyCreateDto dto)
         {
             var result = await _service.CreateAsync(dto);
@@ -36,6 +38,7 @@ namespace PresentationLayer.Controllers
 
         // PUT
         [HttpPut("{id}")]
+        [Authorize(Roles = "0,1")]
         public async Task<IActionResult> Update(string id, [FromBody] BookCopyUpdateDto dto)
         {
             await _service.UpdateAsync(id, dto);
@@ -44,6 +47,7 @@ namespace PresentationLayer.Controllers
 
         // DELETE
         [HttpDelete("{id}")]
+        [Authorize(Roles = "0,1")]
         public async Task<IActionResult> Delete(string id)
         {
             await _service.DeleteAsync(id);
@@ -52,6 +56,7 @@ namespace PresentationLayer.Controllers
 
         // GET: api/BookCopies/by-book/{bookId}
         [HttpGet("by-book/{bookId}")]
+        [Authorize(Roles = "0,1")]
         public async Task<IActionResult> GetByBookId(string bookId)
         {
             var list = await _service.GetByBookIdAsync(bookId);
@@ -68,6 +73,7 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpGet("available/{bookId}")]
+        [Authorize(Roles = "0,1,2")]
         public async Task<IActionResult> GetAvailableCopies(string bookId)
         {
             var available = await _service.GetAvailableCopiesAsync(bookId);

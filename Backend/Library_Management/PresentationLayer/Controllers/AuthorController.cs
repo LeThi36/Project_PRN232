@@ -66,6 +66,7 @@ namespace PresentationLayer.Controllers
         /// <param name="authorDto">Dữ liệu tác giả cần thêm.</param>
         /// <returns>Kết quả tạo tác giả.</returns>
         [HttpPost]
+        [Authorize(Roles = "0")]
         public async Task<IActionResult> AddAuthor([FromBody] AuthorDto authorDto)
         {
             if (!ModelState.IsValid)
@@ -104,6 +105,7 @@ namespace PresentationLayer.Controllers
         /// <param name="authorDto">Dữ liệu tác giả đã cập nhật.</param>
         /// <returns>Kết quả cập nhật.</returns>
         [HttpPut("{id}")]
+        [Authorize(Roles = "0")]
         public async Task<IActionResult> UpdateAuthor(string id, [FromBody] AuthorDto authorDto)
         {
             if (!ModelState.IsValid)
@@ -141,6 +143,7 @@ namespace PresentationLayer.Controllers
         /// <param name="id">ID của tác giả cần xóa.</param>
         /// <returns>Kết quả xóa.</returns>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "0")]
         public async Task<IActionResult> RemoveAuthor(string id)
         {
             if (string.IsNullOrEmpty(id))

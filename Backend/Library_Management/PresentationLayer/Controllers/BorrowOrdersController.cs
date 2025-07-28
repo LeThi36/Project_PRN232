@@ -18,6 +18,7 @@ namespace PresentationLayer.Controllers
 
         // POST: api/borroworders/checkout/{studentCode}
         [HttpPost("checkout/{studentCode}")]
+        [Authorize(Roles = "0,1,2")]
         public async Task<IActionResult> CheckoutCart(string studentCode)
         {
             try
@@ -33,6 +34,7 @@ namespace PresentationLayer.Controllers
 
         // PUT: api/borroworders/approve/{orderId}
         [HttpPut("approve/{orderId}")]
+        [Authorize(Roles = "0,1")]
         public async Task<IActionResult> ApproveOrder(string orderId)
         {
             try
@@ -48,6 +50,7 @@ namespace PresentationLayer.Controllers
 
         // PUT: api/borroworders/return/{recordId}
         [HttpPut("return/{recordId}")]
+        [Authorize(Roles = "0,1,2")]
         public async Task<IActionResult> ReturnBook(string recordId)
         {
             try
@@ -63,6 +66,7 @@ namespace PresentationLayer.Controllers
 
         // GET: api/borroworders/student/{studentCode}
         [HttpGet("student/{studentCode}")]
+        [Authorize(Roles = "0,1,2")]
         public async Task<IActionResult> GetOrdersByStudent(string studentCode)
         {
             try
@@ -77,6 +81,7 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpPost("cancel/{id}")]
+        [Authorize(Roles = "0,1,2")]
         public async Task<IActionResult> CancelBorrowOrder(string id)
         {
             var result = await _borrowOrderService.CancelBorrowOrderAsync(id);
@@ -86,12 +91,14 @@ namespace PresentationLayer.Controllers
             return Ok(new { message = "Đã hủy phiếu mượn và cập nhật sách." });
         }
         [HttpGet("all")]
+        [Authorize(Roles = "0,1,2")]
         public async Task<IActionResult> GetAllOrders()
         {
             var orders = await _borrowOrderService.GetAllOrdersAsync();
             return Ok(orders);
         }
         [HttpGet("search")]
+        [Authorize(Roles = "0,1,2")]
         public async Task<IActionResult> SearchOrders([FromQuery] string? studentCode, [FromQuery] string? status)
         {
             var result = await _borrowOrderService.SearchOrdersAsync(studentCode, status);

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DataLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PresentationLayer.Controllers
 {
@@ -21,6 +22,7 @@ namespace PresentationLayer.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(PaginationResult<BookDto>), 200)]
         [ProducesResponseType(500)]
+        [Authorize(Roles = "0,1,2")]
         public async Task<IActionResult> GetAllBooks([FromQuery] BookFilterAndSearchRequestDto request)
         {
             try
@@ -39,6 +41,7 @@ namespace PresentationLayer.Controllers
         [ProducesResponseType(typeof(BookDto), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
+        [Authorize(Roles = "0,1,2")]
         public async Task<IActionResult> GetBookById(string id)
         {
             try
@@ -61,6 +64,7 @@ namespace PresentationLayer.Controllers
         [ProducesResponseType(typeof(BookDto), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
+        [Authorize(Roles = "0")]
         public async Task<IActionResult> CreateBook([FromBody] CreateBookDto createBookDto)
         {
             if (!ModelState.IsValid)
@@ -89,6 +93,7 @@ namespace PresentationLayer.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
+        [Authorize(Roles = "0")]
         public async Task<IActionResult> UpdateBook(string id, [FromBody] UpdateBookDto updateBookDto)
         {
             if (id != updateBookDto.Id)
@@ -125,6 +130,7 @@ namespace PresentationLayer.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
+        [Authorize(Roles = "0")]
         public async Task<IActionResult> DeleteBook(string id)
         {
             try

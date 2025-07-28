@@ -251,25 +251,25 @@ namespace DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BorrowOrder",
+                name: "borrow_orders",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    BorrowDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TotalFine = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    user_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    borrow_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    due_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    total_fine = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BorrowOrder", x => x.Id);
+                    table.PrimaryKey("PK_borrow_orders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BorrowOrder_users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_borrow_orders_users_user_id",
+                        column: x => x.user_id,
                         principalTable: "users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -346,16 +346,16 @@ namespace DataLayer.Migrations
                 {
                     table.PrimaryKey("PK__borrow_r__3213E83F6ECCAA08", x => x.id);
                     table.ForeignKey(
-                        name: "FK_borrow_records_BorrowOrder_BorrowOrderId",
-                        column: x => x.BorrowOrderId,
-                        principalTable: "BorrowOrder",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_borrow_records_book_copies",
                         column: x => x.copy_id,
                         principalTable: "book_copies",
                         principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_borrow_records_borrow_orders_BorrowOrderId",
+                        column: x => x.BorrowOrderId,
+                        principalTable: "borrow_orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_borrow_records_users",
                         column: x => x.user_id,
@@ -449,6 +449,11 @@ namespace DataLayer.Migrations
                 column: "publisher_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_borrow_orders_user_id",
+                table: "borrow_orders",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_borrow_records_BorrowOrderId",
                 table: "borrow_records",
                 column: "BorrowOrderId");
@@ -462,11 +467,6 @@ namespace DataLayer.Migrations
                 name: "IX_borrow_records_user_id",
                 table: "borrow_records",
                 column: "user_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BorrowOrder_UserId",
-                table: "BorrowOrder",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_cart_items_book_id",
@@ -520,10 +520,10 @@ namespace DataLayer.Migrations
                 name: "RevokedTokens");
 
             migrationBuilder.DropTable(
-                name: "BorrowOrder");
+                name: "book_copies");
 
             migrationBuilder.DropTable(
-                name: "book_copies");
+                name: "borrow_orders");
 
             migrationBuilder.DropTable(
                 name: "carts");
