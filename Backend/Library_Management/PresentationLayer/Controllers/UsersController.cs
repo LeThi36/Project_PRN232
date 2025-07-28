@@ -18,6 +18,24 @@ namespace PresentationLayer.Controllers
             _userService = userService;
         }
 
+        [HttpGet("student/{studentCode}")]
+        public async Task<IActionResult> GetUserByStudentCode(string studentCode)
+        {
+            var user = await _userService.GetUserByStudentCodeAsync(studentCode);
+            if (user == null) return NotFound();
+
+            var userDto = new
+            {
+                user.Id,
+                user.Username,
+                user.StudentCode,
+                user.Email,
+                user.PhoneNumber
+                // KHÔNG trả Role hay các collection
+            };
+
+            return Ok(userDto);
+        }
         // GET: api/Users/students
         [HttpGet("students")]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetStudents()
@@ -26,7 +44,29 @@ namespace PresentationLayer.Controllers
             return Ok(students);
         }
 
-        [Authorize(Roles = "2")] // Yêu cầu người dùng phải đăng nhập
+        [HttpGet("profile")]
+        [Authorize] // Có thể điều chỉnh vai trò được phép truy cập profile
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public async Task<IActionResult> GetProfile()
+        {
+            // Lấy UserId từ token JWT
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User ID not found in token.");
+            }
+
+            var userDto = await _userService.GetUserByIdAsync(userId);
+            if (userDto == null)
+            {
+                return NotFound("User profile not found.");
+            }
+
+            return Ok(userDto);
+        }
+
+        [Authorize] // Yêu cầu người dùng phải đăng nhập
         [HttpPut("profile")]
         public async Task<IActionResult> UpdateProfile([FromForm] UpdateProfileDto updateDto)
         {
@@ -76,5 +116,6 @@ namespace PresentationLayer.Controllers
             var result = await _userService.ToggleBanStatusAsync(id, false);
             return result ? NoContent() : NotFound();
         }
+
     }
 }

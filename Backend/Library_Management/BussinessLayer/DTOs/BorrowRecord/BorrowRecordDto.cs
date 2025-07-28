@@ -8,12 +8,14 @@ namespace BussinessLayer.DTOs.BorrowRecord
 {
     public class BorrowRecordDto
     {
-        public string BorrowId { get; set; } = null!;
-        public string BookTitle { get; set; } = null!;
-        public string CopyCode { get; set; } = null!;
-        public string Status { get; set; } = null!;
-        public DateTime? BorrowDate { get; set; }
-        public DateTime? DueDate { get; set; }
+        public string Id { get; set; }
+        public string CopyId { get; set; }
+        public DateTime BorrowDate { get; set; }
+        public DateTime DueDate { get; set; }
+        public DateTime? ReturnDate { get; set; }
+        public int ExtensionDateCount { get; set; }
+        public string Status { get; set; }
         public decimal Fine { get; set; }
+        public string BookTitle { get; set; }
     }
 }

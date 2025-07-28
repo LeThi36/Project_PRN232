@@ -1,22 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
-namespace DataLayer.Entities
+namespace DataLayer.Entities;
+
+[Table("borrow_orders")]
+[Index(nameof(UserId), Name = "IX_borrow_orders_user_id")]
+public class BorrowOrder : BaseEntity
 {
-    public class BorrowOrder : BaseEntity
-    {
-        public string UserId { get; set; } = null!;
-        public virtual User User { get; set; } = null!;
+    [Column("user_id")]
+    public string UserId { get; set; } = null!;
 
-        public DateTime BorrowDate { get; set; }
-        public DateTime DueDate { get; set; }
-        public string Status { get; set; } = "Pending"; // Pending, Approved, Rejected, Completed
+    [ForeignKey(nameof(UserId))]
+    public virtual User User { get; set; } = null!;
 
-        public decimal TotalFine { get; set; } = 0;
+    [Column("borrow_date")]
+    public DateTime BorrowDate { get; set; }
 
-        public virtual ICollection<BorrowRecord> BorrowRecords { get; set; } = new List<BorrowRecord>();
-    }
+    [Column("due_date")]
+    public DateTime DueDate { get; set; }
+
+    [Column("status")]
+    public string Status { get; set; } = "Pending"; // Pending, Approved, Rejected, Completed
+
+    [Column("total_fine")]
+    public decimal TotalFine { get; set; } = 0;
+
+    public virtual ICollection<BorrowRecord> BorrowRecords { get; set; } = new List<BorrowRecord>();
 }

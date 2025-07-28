@@ -1,0 +1,66 @@
+﻿@page
+@model LibraryWebApp.Pages.Profile.UpdateProfileModel
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<h2>Edit Profile</h2>
+
+@if (!string.IsNullOrEmpty(Model.StatusMessage))
+{
+    <div class="alert alert-info">@Model.StatusMessage</div>
+}
+
+<form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+    <div class="mb-3">
+        <label asp-for="ProfileData.PhoneNumber" class="form-label">Phone Number</label>
+        <input asp-for="ProfileData.PhoneNumber" class="form-control" required />
+        <div class="invalid-feedback">Phone number is required and must start with 0 and contain 10 digits.</div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="ProfileData.DateOfBirth" class="form-label">Date of Birth</label>
+        <input asp-for="ProfileData.DateOfBirth" type="date" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="ProfileData.Gender" class="form-label">Gender</label>
+        <select asp-for="ProfileData.Gender" class="form-select">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="ProfileData.Address" class="form-label">Address</label>
+        <input asp-for="ProfileData.Address" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Current Avatar</label><br />
+        @if (!string.IsNullOrEmpty(Model.CurrentImageUrl))
+        {
+            <img src="@Model.CurrentImageUrl" alt="Avatar" class="img-thumbnail" style="max-width: 150px;" />
+        }
+    </div>
+    <div class="mb-3">
+        <label asp-for="ProfileData.ImageFile" class="form-label">Upload New Avatar</label>
+        <input asp-for="ProfileData.ImageFile" type="file" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
+
+@section Scripts {
+    <script>
+        (function () {
+            'use strict';
+            var forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>
+}
+
