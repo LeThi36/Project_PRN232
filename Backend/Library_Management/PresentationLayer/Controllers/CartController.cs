@@ -27,9 +27,12 @@ namespace PresentationLayer.Controllers
         public async Task<IActionResult> AddToCart(string studentCode, string bookId, int quantity)
         {
             var success = await _service.AddToCartAsync(studentCode, bookId, quantity);
-            if (!success) return BadRequest("Không thêm được sách vào giỏ.");
-            return Ok();
+            if (!success)
+                return BadRequest("Không thể thêm vào giỏ. Có thể sách không tồn tại hoặc không còn bản sao khả dụng.");
+
+            return Ok("Đã thêm sách vào giỏ.");
         }
+
 
         [HttpPut("update")]
         public async Task<IActionResult> UpdateQuantity(

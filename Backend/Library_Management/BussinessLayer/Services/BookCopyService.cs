@@ -3,6 +3,7 @@ using BussinessLayer.DTOs.NewFolder1;
 using BussinessLayer.Services.Interface;
 using DataLayer.Entities;
 using DataLayer.Repositories.Abstraction;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,6 +59,11 @@ namespace BussinessLayer.Services
         public async Task<IEnumerable<BookCopy>> GetByBookIdAsync(string bookId)
         {
             return await _copyRepo.GetAllAsync(c => c.BookId == bookId);
+        }
+        public async Task<int> GetAvailableCopiesAsync(string bookId)
+        {
+            var copies = await _copyRepo.GetAllAsync(c => c.BookId == bookId && c.Status == "Available");
+            return copies.Count();
         }
     }
 }

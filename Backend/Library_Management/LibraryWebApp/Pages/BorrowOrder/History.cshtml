@@ -1,0 +1,89 @@
+﻿@page
+@model LibraryWebApp.Pages.BorrowOrder.HistoryModel
+@{
+    ViewData["Title"] = "Lịch sử phiếu mượn";
+}
+
+<h2>Lịch sử phiếu mượn sách</h2>
+
+@if (Model.BorrowOrders == null || !Model.BorrowOrders.Any())
+{
+    <div class="alert alert-info">Bạn chưa có phiếu mượn nào.</div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Mã phiếu</th>
+                <th>Ngày mượn</th>
+                <th>Hạn trả</th>
+                <th>Trạng thái</th>
+                <th>Sách</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.BorrowOrders)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.BorrowDate.ToString("dd/MM/yyyy")</td>
+                    <td>@order.DueDate.ToString("dd/MM/yyyy")</td>
+                    <td>@order.Status</td>
+                    <td>
+                        <ul>
+                            @foreach (var record in order.BorrowRecords)
+                            {
+                                <li>@record.BookTitle</li>
+                            }
+                        </ul>
+                    </td>
+                    <td>
+                        @if (order.Status == "Pending")
+                        {
+                            <button class="btn btn-danger btn-sm" onclick="cancelOrder('@order.Id')">Hủy</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@section Scripts {
+    <script>
+        async function cancelOrder(orderId) {
+            const confirmCancel = confirm("Bạn có chắc muốn hủy phiếu mượn này?");
+            if (!confirmCancel) return;
+
+            const token = getCookie("AccessToken");
+
+            try {
+                const response = await fetch(`https://localhost:7092/api/BorrowOrders/cancel/${orderId}`, {
+                    method: "POST", // hoặc PUT nếu backend bạn dùng PUT
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    alert("Đã hủy phiếu mượn thành công.");
+                    location.reload();
+                } else {
+                    const error = await response.text();
+                    alert("Lỗi: " + error);
+                }
+            } catch (err) {
+                alert("Đã xảy ra lỗi kết nối đến máy chủ.");
+                console.error(err);
+            }
+        }
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+    </script>
+}

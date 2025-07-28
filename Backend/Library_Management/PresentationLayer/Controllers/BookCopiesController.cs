@@ -1,5 +1,6 @@
 ﻿using BussinessLayer.DTOs.BookCopy;
 using BussinessLayer.DTOs.NewFolder1;
+using BussinessLayer.Services;
 using BussinessLayer.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -63,6 +64,12 @@ namespace PresentationLayer.Controllers
             }).ToList();
 
             return Ok(result);
+        }
+        [HttpGet("available/{bookId}")]
+        public async Task<IActionResult> GetAvailableCopies(string bookId)
+        {
+            var available = await _service.GetAvailableCopiesAsync(bookId);
+            return Ok(available);
         }
     }
 

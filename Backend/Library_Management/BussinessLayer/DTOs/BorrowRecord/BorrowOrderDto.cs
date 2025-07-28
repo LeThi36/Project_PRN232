@@ -6,16 +6,15 @@ using System.Threading.Tasks;
 
 namespace BussinessLayer.DTOs.BorrowRecord
 {
-    public class BorrowRecordDto
+    public class BorrowOrderDto
     {
         public string Id { get; set; }
-        public string CopyId { get; set; }
+        public string UserId { get; set; }
         public DateTime BorrowDate { get; set; }
         public DateTime DueDate { get; set; }
-        public DateTime? ReturnDate { get; set; }
-        public int ExtensionDateCount { get; set; }
         public string Status { get; set; }
-        public decimal Fine { get; set; }
-        public string BookTitle { get; set; }
+        public decimal TotalFine { get; set; }
+        public List<BorrowRecordDto> BorrowRecords { get; set; } = new();
     }
+
 }

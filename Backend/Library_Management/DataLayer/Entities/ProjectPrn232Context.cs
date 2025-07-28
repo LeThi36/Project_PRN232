@@ -21,6 +21,7 @@ public partial class ProjectPrn232Context : DbContext
     public virtual DbSet<Publisher> Publishers { get; set; }
     public virtual DbSet<Role> Roles { get; set; }
     public virtual DbSet<User> Users { get; set; }
+    public DbSet<BorrowOrder> BorrowOrders { get; set; }
 
     public DbSet<Cart> Carts { get; set; }
     public DbSet<CartItem> CartItems { get; set; }

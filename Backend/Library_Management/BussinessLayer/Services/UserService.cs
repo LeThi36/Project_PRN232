@@ -35,7 +35,6 @@ namespace BussinessLayer.Services
                                  .Include(u => u.Role)
                                  .SingleOrDefaultAsync(u => u.StudentCode == studentCode);
         }
-
         public async Task<IEnumerable<UserDto>> GetStudentsAsync()
         {
             var students = await _context.Users
@@ -67,7 +66,7 @@ namespace BussinessLayer.Services
 
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
-            return user;
+            return true;
         }
 
         public async Task<UserDto?> UpdateProfileAsync(string userId, UpdateProfileDto updateDto)
@@ -104,7 +103,6 @@ namespace BussinessLayer.Services
             await _userRepository.UpdateAsync(user);
 
             return _mapper.Map<UserDto>(user);
-            return true;
         }
         public async Task<bool> ToggleBanStatusAsync(string userId, bool ban)
         {

@@ -15,5 +15,6 @@ namespace BussinessLayer.Services.Interface
         Task UpdateAsync(string id, BookCopyUpdateDto dto);
         Task DeleteAsync(string id);
         Task<IEnumerable<BookCopy>> GetByBookIdAsync(string bookId);
+        Task<int> GetAvailableCopiesAsync(string bookId);
     }
 }
