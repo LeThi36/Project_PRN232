@@ -17,5 +17,6 @@ namespace BussinessLayer.Services.Interface
         Task<UserDto?> CreateUserAsync(CreateUserDto dto);
         Task<bool> UpdateUserAsync(UpdateUserDto dto);
         Task<bool> ToggleBanStatusAsync(string userId, bool ban);
+        Task<UserDto?> GetUserByIdAsync(string userId);
     }
 }

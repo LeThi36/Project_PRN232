@@ -1,0 +1,152 @@
+﻿@page
+@model LibraryWebApp.Pages.Author.IndexModel
+@{
+    ViewData["Title"] = "Manage Authors";
+}
+
+@if (!string.IsNullOrEmpty(TempData["StatusMessage"] as string))
+{
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        @TempData["StatusMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<section class="pt-120 pb-120">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="title mb-0">Author Management</h2>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
+                <i class="fa fa-plus"></i> Add Author
+            </button>
+        </div>
+
+        <table class="table table-striped table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Authors?.Any() == true)
+                {
+                    @for (int i = 0; i < Model.Authors.Count; i++)
+                    {
+                        var a = Model.Authors[i];
+                        <tr>
+                            <td>@(i + 1)</td>
+                            <td>@a.AuthorName</td>
+                            <td>
+                                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal-@a.Id">
+                                    Edit
+                                </button>
+                                <form asp-page-handler="Delete" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@a.Id" />
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+
+                        <!-- Edit Modal -->
+                        <div class="modal fade" id="editModal-@a.Id" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Edit Author</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <form asp-page-handler="Edit" method="post" class="needs-validation" novalidate>
+                                        <div class="modal-body">
+                                            <input type="hidden" name="id" value="@a.Id" />
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Name</label>
+                                                <input type="text" name="authorName" value="@a.AuthorName"
+                                                       class="form-control" required />
+                                                <div class="invalid-feedback">Name is required.</div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="text-center">No authors found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Create Modal -->
+<div class="modal fade" id="createModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Author</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-page-handler="Create" method="post" class="needs-validation" novalidate>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input asp-for="NewAuthor.AuthorName" class="form-control" required />
+                        <div class="invalid-feedback">Name is required.</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        setTimeout(function () {
+            var alertBox = document.querySelector('.alert');
+            if (alertBox) {
+                var alert = new bootstrap.Alert(alertBox);
+                alert.close();
+            }
+        }, 5000);
+
+        // Bootstrap client-side validation
+        (function () {
+            'use strict';
+            var forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+
+        // Auto-open create modal if validation failed
+        document.addEventListener("DOMContentLoaded", function () {
+            var msg = '@TempData["StatusMessage"]';
+            if (msg?.toString().toLowerCase().includes("invalid")) {
+                new bootstrap.Modal(document.getElementById("createModal")).show();
+            }
+        });
+    </script>
+}

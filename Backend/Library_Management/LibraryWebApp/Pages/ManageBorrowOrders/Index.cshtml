@@ -1,0 +1,152 @@
+﻿@page
+@model LibraryWebApp.Pages.ManageBorrowOrders.IndexModel
+@{
+    ViewData["Title"] = "Manage Borrow Orders";
+}
+
+<h2 class="text-3xl font-bold text-gray-800 mb-6">📚 Manage Borrow Orders</h2>
+
+<form method="get" class="flex flex-wrap items-center gap-3 mb-6">
+    <input name="StudentCode" value="@Model.StudentCode" placeholder="Search by Student Code"
+           class="p-2 border border-gray-300 rounded-md shadow-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+
+    <button type="submit" name="Status" value="All" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">All</button>
+    <button type="submit" name="Status" value="Pending" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">Pending</button>
+    <button type="submit" name="Status" value="Borrowed" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Borrowed</button>
+    <button type="submit" name="Status" value="Returned" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">Returned</button>
+    <button type="submit" name="Status" value="Cancelled" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">Cancelled</button>
+</form>
+
+<div class="overflow-x-auto shadow rounded-lg">
+    <table class="w-full border text-sm text-left text-gray-700">
+        <thead class="bg-gray-100 text-gray-700 uppercase text-xs">
+            <tr>
+                <th class="border px-4 py-3">#</th>
+                <th class="border px-4 py-3">Student</th>
+                <th class="border px-4 py-3">Book Title</th>
+                <th class="border px-4 py-3">Borrow Date</th>
+                <th class="border px-4 py-3">Due Date</th>
+                <th class="border px-4 py-3">Return Date</th>
+                <th class="border px-4 py-3">Status</th>
+                <th class="border px-4 py-3">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.BorrowOrders != null && Model.BorrowOrders.Any())
+            {
+                var index = 1;
+                foreach (var order in Model.BorrowOrders)
+                {
+                    foreach (var record in order.BorrowRecords)
+                    {
+                        var highlight = record.Status == "Borrowed" && (record.DueDate - DateTime.Now).TotalDays <= 2;
+                        <tr class="@(highlight ? "bg-red-50" : "hover:bg-gray-50")">
+                            <td class="border px-4 py-2">@index++</td>
+                            <td class="border px-4 py-2 font-medium">@order.StudentCode</td>
+                            <td class="border px-4 py-2">@record.BookTitle</td>
+                            <td class="border px-4 py-2">@record.BorrowDate.ToShortDateString()</td>
+                            <td class="border px-4 py-2 text-sm text-gray-600">
+                                @if (record.Status != "Cancelled")
+                                {
+                                    @record.DueDate.ToShortDateString()
+                                }
+                            </td>
+                            <td class="border px-4 py-2 text-sm text-gray-600">
+                                @if (record.Status == "Returned" && record.ReturnDate != null)
+                                {
+                                    @record.ReturnDate?.ToShortDateString()
+                                }
+                                else
+                                {
+                                    <span class="text-gray-400">-</span>
+                                }
+                            </td>
+                            <td class="border px-4 py-2 font-semibold">@record.Status</td>
+                            <td class="border px-4 py-2">
+                                @if (record.Status == "Pending")
+                                {
+                                    <button class="px-3 py-1 bg-green-500 text-white rounded mr-1 hover:bg-green-600 transition btn-approve" data-id="@order.Id">Approve</button>
+                                    <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition btn-reject" data-id="@order.Id">Reject</button>
+                                }
+                                else if (record.Status == "Borrowed")
+                                {
+                                    <button class="px-3 py-1 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition btn-return"
+                                            data-id="@record.Id"
+                                            data-student="@order.StudentCode"
+                                            data-borrowdate="@record.BorrowDate"
+                                            data-duedate="@record.DueDate">
+                                        Return
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8" class="text-center py-6 text-gray-500">No borrow orders found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.querySelectorAll(".btn-approve").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const id = btn.dataset.id;
+                fetch(`https://localhost:7092/api/BorrowOrders/approve/${id}`, { method: 'PUT' })
+                    .then(res => res.ok
+                        ? Swal.fire("✅ Approved!", "Order approved.", "success").then(() => location.reload())
+                        : Swal.fire("❌ Error", "Could not approve.", "error"));
+            });
+        });
+
+        document.querySelectorAll(".btn-reject").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const id = btn.dataset.id;
+                fetch(`https://localhost:7092/api/BorrowOrders/cancel/${id}`, { method: 'POST' })
+                    .then(res => res.ok
+                        ? Swal.fire("🚫 Rejected!", "Order cancelled.", "success").then(() => location.reload())
+                        : Swal.fire("❌ Error", "Could not reject.", "error"));
+            });
+        });
+
+        document.querySelectorAll(".btn-return").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const id = btn.dataset.id;
+                const student = btn.dataset.student;
+                const borrowDate = new Date(btn.dataset.borrowdate);
+                const dueDate = new Date(btn.dataset.duedate);
+                const today = new Date();
+                const overdueDays = Math.floor((today - dueDate) / (1000 * 60 * 60 * 24));
+                const fine = overdueDays > 0 ? overdueDays * 5000 : 0;
+
+                let html = `
+                                    <p>👤 <b>${student}</b></p>
+                                    <p>📅 Borrow Date: ${borrowDate.toDateString()}</p>
+                                    <p>📆 Due Date: ${dueDate.toDateString()}</p>`;
+                if (fine > 0) html += `<p class='text-red-600 font-semibold'>💸 Overdue Fine: ${fine.toLocaleString()} VND</p>`;
+
+                Swal.fire({
+                    title: 'Confirm Return',
+                    html: html,
+                    showCancelButton: true,
+                    confirmButtonText: '✅ Return Book',
+                    cancelButtonText: 'Cancel'
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        fetch(`https://localhost:7092/api/BorrowOrders/return/${id}`, { method: 'PUT' })
+                            .then(res => res.ok
+                                ? Swal.fire("✅ Returned!", "Book returned successfully.", "success").then(() => location.reload())
+                                : Swal.fire("❌ Error", "Could not return.", "error"));
+                    }
+                });
+            });
+        });
+    </script>
+}

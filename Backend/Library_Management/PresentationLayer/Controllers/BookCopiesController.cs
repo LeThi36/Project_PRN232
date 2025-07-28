@@ -66,7 +66,7 @@ namespace PresentationLayer.Controllers
 
             return Ok(result);
         }
-        
+
         [HttpGet("available/{bookId}")]
         public async Task<IActionResult> GetAvailableCopies(string bookId)
         {
@@ -94,6 +94,6 @@ namespace PresentationLayer.Controllers
 
             return Ok(result);
         }
-
     }
 }
+

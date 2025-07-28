@@ -1,4 +1,5 @@
 ﻿using BussinessLayer.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -84,5 +85,17 @@ namespace PresentationLayer.Controllers
 
             return Ok(new { message = "Đã hủy phiếu mượn và cập nhật sách." });
         }
-    }
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllOrders()
+        {
+            var orders = await _borrowOrderService.GetAllOrdersAsync();
+            return Ok(orders);
+        }
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchOrders([FromQuery] string? studentCode, [FromQuery] string? status)
+        {
+            var result = await _borrowOrderService.SearchOrdersAsync(studentCode, status);
+            return Ok(result);
+        }
+    }   
 }

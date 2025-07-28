@@ -128,6 +128,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 // ✅ Áp dụng CORS ở đây (trước Authentication)
 app.UseCors("AllowFrontend");
