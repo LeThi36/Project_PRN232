@@ -26,7 +26,29 @@ namespace PresentationLayer.Controllers
             return Ok(students);
         }
 
-        [Authorize(Roles = "2")] // Yêu cầu người dùng phải đăng nhập
+        [HttpGet("profile")]
+        [Authorize] // Có thể điều chỉnh vai trò được phép truy cập profile
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public async Task<IActionResult> GetProfile()
+        {
+            // Lấy UserId từ token JWT
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User ID not found in token.");
+            }
+
+            var userDto = await _userService.GetUserByIdAsync(userId);
+            if (userDto == null)
+            {
+                return NotFound("User profile not found.");
+            }
+
+            return Ok(userDto);
+        }
+
+        [Authorize] // Yêu cầu người dùng phải đăng nhập
         [HttpPut("profile")]
         public async Task<IActionResult> UpdateProfile([FromForm] UpdateProfileDto updateDto)
         {

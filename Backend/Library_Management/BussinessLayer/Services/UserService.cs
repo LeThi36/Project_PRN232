@@ -75,7 +75,7 @@ namespace BussinessLayer.Services
             var user = await _userRepository.GetAsync(u => u.Id == userId);
             if (user == null)
             {
-                return null; // Không tìm thấy user
+                return null;
             }
 
             // Xử lý upload ảnh
@@ -86,7 +86,10 @@ namespace BussinessLayer.Services
 
                 // Lưu ảnh mới và lấy đường dẫn
                 var newImageUrl = await _fileService.SaveFileAsync(updateDto.ImageFile);
-                user.ImageUrl = newImageUrl;
+                if (newImageUrl != null)
+                {
+                    user.ImageUrl = newImageUrl;
+                }
             }
 
             // Cập nhật các trường thông tin khác
@@ -101,7 +104,14 @@ namespace BussinessLayer.Services
 
             user.UpdatedAt = DateTime.Now;
 
-            await _userRepository.UpdateAsync(user);
+            // --- THÊM DÒNG NÀY ĐỂ BÁO CHO REPOSITORY BIẾT OBJECT ĐÃ THAY ĐỔI ---
+            // Mặc dù GetAsync đã tracked, gọi UpdateAsync một lần nữa không hại,
+            // và nó giúp đảm bảo trạng thái Modified rõ ràng nếu có trường hợp không được tracked đúng cách.
+            await _userRepository.UpdateAsync(user); // Gọi phương thức UpdateAsync từ GenericRepository
+
+            // Sau đó gọi SaveAsync để lưu tất cả các thay đổi được theo dõi bởi DbContext.
+            // Dòng này đã có sẵn trong code của bạn.
+            await _userRepository.SaveAsync();
 
             return _mapper.Map<UserDto>(user);
         }
@@ -128,6 +138,16 @@ namespace BussinessLayer.Services
             await _context.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<UserDto?> GetUserByIdAsync(string userId)
+        {
+            var user = await _userRepository.GetAsync(u => u.Id == userId);
+            if (user == null)
+            {
+                return null;
+            }
+            return _mapper.Map<UserDto>(user);
         }
     }
 }
