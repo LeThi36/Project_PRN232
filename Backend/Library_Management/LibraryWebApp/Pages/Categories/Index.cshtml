@@ -1,0 +1,89 @@
+﻿@page
+@model LibraryWebApp.Pages.Categories.IndexModel
+@{
+    ViewData["Title"] = "Manage Categories";
+}
+
+<h2>Manage Categories</h2>
+
+@if (!string.IsNullOrEmpty(TempData["StatusMessage"]?.ToString()))
+{
+    <div class="alert alert-info">@TempData["StatusMessage"]</div>
+}
+
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createModal">+ Add Category</button>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Category Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Categories.Any())
+        {
+            int count = 1;
+            foreach (var category in Model.Categories)
+            {
+                <tr>
+                    <td>@(count++)</td>
+                    <td>@category.CategoryName</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal-@category.Id">Edit</button>
+
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@category.Id" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+
+                <div class="modal fade" id="editModal-@category.Id" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form method="post" asp-page-handler="Edit">
+                                <input type="hidden" name="EditCategory.Id" value="@category.Id" />
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Edit Category</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="text" name="EditCategory.CategoryName" class="form-control" value="@category.CategoryName" required />
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-success">Save</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <tr><td colspan="3" class="text-center">No categories found.</td></tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="createModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="Create">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" name="NewCategoryName" class="form-control" placeholder="Category Name" required />
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
