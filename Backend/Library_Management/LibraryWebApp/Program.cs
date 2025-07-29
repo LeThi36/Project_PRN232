@@ -15,9 +15,7 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddScoped<IPublisherService, PublisherService>();
 builder.Services.AddScoped<IBookCopyService, BookCopyService>();
 builder.Services.AddDbContext<ProjectPrn232Context>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
 // Đăng ký IHttpContextAccessor để có thể truy cập HttpContext trong các service

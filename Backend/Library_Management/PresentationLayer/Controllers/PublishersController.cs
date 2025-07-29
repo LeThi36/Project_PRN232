@@ -1,6 +1,7 @@
 ﻿using BussinessLayer.DTOs.Publisher;
 using BussinessLayer.Services.Interface;
 using DataLayer.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PresentationLayer.Controllers
@@ -20,6 +21,7 @@ namespace PresentationLayer.Controllers
         /// Lấy tất cả nhà xuất bản.
         /// </summary>
         [HttpGet]
+        [Authorize(Roles = "0,1,2")]
         public async Task<IActionResult> GetAllPublishers()
         {
             var publishers = await _publisherService.GetAllPublisher();
@@ -41,6 +43,7 @@ namespace PresentationLayer.Controllers
         /// Lấy một nhà xuất bản theo ID.
         /// </summary>
         [HttpGet("{id}")]
+        [Authorize(Roles = "0,1,2")]
         public async Task<IActionResult> GetPublisherById(string id)
         {
             try
@@ -67,6 +70,7 @@ namespace PresentationLayer.Controllers
         /// Tạo một nhà xuất bản mới.
         /// </summary>
         [HttpPost]
+        [Authorize(Roles = "0")]
         public async Task<IActionResult> AddPublisher([FromBody] PublisherCreateDto dto)
         {
             if (!ModelState.IsValid)
@@ -101,6 +105,7 @@ namespace PresentationLayer.Controllers
         /// Cập nhật thông tin nhà xuất bản.
         /// </summary>
         [HttpPut("{id}")]
+        [Authorize(Roles = "0")]
         public async Task<IActionResult> UpdatePublisher(string id, [FromBody] PublisherUpdateDto dto)
         {
             if (!ModelState.IsValid)
@@ -132,6 +137,7 @@ namespace PresentationLayer.Controllers
         /// Xóa một nhà xuất bản.
         /// </summary>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "0")]
         public async Task<IActionResult> RemovePublisher(string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -151,5 +157,36 @@ namespace PresentationLayer.Controllers
                 return StatusCode(500, $"Error deleting publisher: {ex.Message}");
             }
         }
+
+        /// <summary>
+        /// Lấy danh sách nhà xuất bản có phân trang và tìm kiếm.
+        /// </summary>
+        [HttpGet("paged")]
+        public async Task<IActionResult> GetPagedPublishers(
+            [FromQuery] string? search,
+            [FromQuery] int pageIndex = 1,
+            [FromQuery] int pageSize = 5)
+        {
+            var result = await _publisherService.GetPagedPublishersAsync(search, pageIndex, pageSize);
+
+            var response = new PaginationResult<PublisherResponseDto>(
+                result.Data.Select(p => new PublisherResponseDto
+                {
+                    Id = p.Id,
+                    PublisherName = p.PublisherName,
+                    Address = p.Address,
+                    PhoneNumber = p.PhoneNumber,
+                    CreatedAt = p.CreatedAt,
+                    UpdatedAt = p.UpdatedAt
+                }),
+                result.TotalCount,
+                result.PageIndex,
+                result.PageSize
+            );
+
+            return Ok(response);
+        }
+
+
     }
 }

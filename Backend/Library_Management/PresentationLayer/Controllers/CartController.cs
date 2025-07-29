@@ -1,5 +1,6 @@
 ﻿using BussinessLayer.Services;
 using BussinessLayer.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,7 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpGet("{studentCode}")]
+        [Authorize(Roles = "0,1,2")]
         public async Task<IActionResult> GetCartItems(string studentCode)
         {
             var result = await _service.GetCartItemsByStudentCodeAsync(studentCode);
@@ -24,6 +26,7 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpPost("add")]
+        [Authorize(Roles = "0,1,2")]
         public async Task<IActionResult> AddToCart(string studentCode, string bookId, int quantity)
         {
             var success = await _service.AddToCartAsync(studentCode, bookId, quantity);
@@ -35,6 +38,7 @@ namespace PresentationLayer.Controllers
 
 
         [HttpPut("update")]
+        [Authorize(Roles = "0,1,2")]
         public async Task<IActionResult> UpdateQuantity(
      [FromQuery] string studentCode,
      [FromQuery] string bookId,
@@ -46,6 +50,7 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpDelete("remove")]
+        [Authorize(Roles = "0,1,2")]
         public async Task<IActionResult> RemoveFromCart(string studentCode, string bookId)
         {
             var success = await _service.RemoveFromCartAsync(studentCode, bookId);
@@ -53,6 +58,7 @@ namespace PresentationLayer.Controllers
             return Ok();
         }
         [HttpGet("total/{studentCode}")]
+        [Authorize(Roles = "0,1,2")]
         public async Task<IActionResult> GetTotalQuantity(string studentCode)
         {
             var total = await _service.GetTotalQuantityAsync(studentCode);
@@ -60,6 +66,7 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpDelete("clear/{studentCode}")]
+        [Authorize(Roles = "0,1,2")]
         public async Task<IActionResult> ClearCart(string studentCode)
         {
             var success = await _service.ClearCartAsync(studentCode);

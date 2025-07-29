@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(ProjectPrn232Context))]
-    [Migration("20250727183208_AddBorrowOrderEntity")]
-    partial class AddBorrowOrderEntity
+    [Migration("20250728193849_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -19,33 +19,39 @@ namespace BussinessLayer.Helper.FileService
 
         public async Task<string> SaveFileAsync(IFormFile file)
         {
-            // Đường dẫn tới thư mục wwwroot
             string wwwRootPath = _webHostEnvironment.WebRootPath;
             if (string.IsNullOrEmpty(wwwRootPath))
             {
-                // Xử lý trường hợp wwwroot không tồn tại (hữu ích cho unit test hoặc console app)
                 wwwRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
             }
 
-            // Tạo thư mục 'images' nếu chưa có
             string contentPath = Path.Combine(wwwRootPath, "images");
             if (!Directory.Exists(contentPath))
             {
+                Console.WriteLine($"Attempting to create directory: {contentPath}");
                 Directory.CreateDirectory(contentPath);
             }
 
-            // Tạo tên file duy nhất để tránh trùng lặp
-            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            // --- IMPORTANT CHANGE HERE ---
+            string extension = Path.GetExtension(file.FileName);
+            string fileName = Guid.NewGuid().ToString() + extension.ToLowerInvariant(); // Convert extension to lowercase
+
             string filePath = Path.Combine(contentPath, fileName);
 
-            // Lưu file vào server
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            try
             {
-                await file.CopyToAsync(fileStream);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+                Console.WriteLine($"File saved successfully to: {filePath}");
+                return "/images/" + fileName; // Return the path with lowercase extension
             }
-
-            // Trả về đường dẫn tương đối để lưu vào DB
-            return "/images/" + fileName;
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving file: {ex.Message}");
+                return null;
+            }
         }
 
         public void DeleteFile(string? relativePath)
@@ -53,8 +59,6 @@ namespace BussinessLayer.Helper.FileService
             if (string.IsNullOrEmpty(relativePath)) return;
 
             string wwwRootPath = _webHostEnvironment.WebRootPath;
-            // Chuyển đổi đường dẫn tương đối thành đường dẫn vật lý
-            // Loại bỏ dấu '/' ở đầu nếu có
             string filePath = Path.Combine(wwwRootPath, relativePath.TrimStart('/'));
 
             if (File.Exists(filePath))
