@@ -17,5 +17,6 @@ namespace BussinessLayer.DTOs.User
         public string Gender { get; set; } = null!;
         public string? Address { get; set; }
         public string? ImageUrl { get; set; }
+
     }
 }

@@ -35,7 +35,6 @@ namespace BussinessLayer.Services
                                  .Include(u => u.Role)
                                  .SingleOrDefaultAsync(u => u.StudentCode == studentCode);
         }
-
         public async Task<IEnumerable<UserDto>> GetStudentsAsync()
         {
             var students = await _context.Users

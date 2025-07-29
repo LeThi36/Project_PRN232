@@ -2,6 +2,7 @@
 @model LibraryWebApp.Pages.Publisher.IndexModel
 @{
     ViewData["Title"] = "Manage Publishers";
+    Layout = "~/Pages/Shared/_AdminLayout.cshtml";
 }
 @if (!string.IsNullOrEmpty(TempData["StatusMessage"]?.ToString()))
 {

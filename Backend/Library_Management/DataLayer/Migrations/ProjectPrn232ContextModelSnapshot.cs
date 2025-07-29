@@ -307,7 +307,8 @@ namespace DataLayer.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("BorrowDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("borrow_date");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -316,27 +317,31 @@ namespace DataLayer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DueDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("due_date");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("status");
 
                     b.Property<decimal>("TotalFine")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("total_fine");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex(new[] { "UserId" }, "IX_borrow_orders_user_id");
 
-                    b.ToTable("BorrowOrder");
+                    b.ToTable("borrow_orders");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.BorrowRecord", b =>
